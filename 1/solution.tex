@@ -96,37 +96,43 @@ TO BE DONE
 
 \section*{Úloha č.4}
 
-\textbf{Vstup:} Gramatika typu 3 $G = (N, \Sigma, P, S)$ taká, že $P$ obsahuje len pravidlá typu
+\textbf{Vstup:} Pravá lineárna gramatika $G_P = (N, \Sigma, P, S)$ taká, že $P$ obsahuje len pravidlá typu
 $A\to xB, x \in (N\cup\Sigma)^*, A,B \in N$ a $A\to x, x \in (N\cup\Sigma)^*, A \in N$\\
-\textbf{Výstup:}
+\textbf{Výstup:} Ľavá lineárna gramatika $G_L = (N_1, \Sigma, P_1, S_1)$ taká, že $P$ obsahuje len pravidlá typu
+$A\to Bx, x \in (N\cup\Sigma)^*, A,B \in N$ a $A\to x, x \in (N\cup\Sigma)^*, A \in N$\\
+\textbf{Metóda:}
+\begin{enumerate}
+    \item $N_1 = N \cup \{S_1\}$
+    \item Pre každé pravidlo z množiny $P$ typu $A\to xB, A,B \in N, x \in (N\cup\Sigma)^*$:\\
+        \begin{align*}
+            (B,Ax) \in P_1 \iff (A, xB) \in P
+        \end{align*}
+    \item Pre každé pravidlo z množiny $P$ typu $A\to x, A \in N, x \in (N\cup\Sigma)^*$:\\
+        \begin{align*}
+            (S_1,Ax) \in P_1 \iff (A, x) \in P
+        \end{align*}
+    \item $P_1 = P_1 \cup \{S\to\epsilon\}$
+\end{enumerate}
 
-\begin{theorem}{x.yz} %You can use theorem, proposition, exercise, or reflection here.  Modify x.yz to be whatever number you are proving
-Delete this text and write theorem statement here.
-\end{theorem}
- 
-\begin{proof}
-Blah, blah, blah.  Here is an example of the \texttt{align} environment:
-%Note 1: The * tells LaTeX not to number the lines.  If you remove the *, be sure to remove it below, too.
-%Note 2: Inside the align environment, you do not want to use $-signs.  The reason for this is that this is already a math environment. This is why we have to include \text{} around any text inside the align environment.
-\begin{align*}
-\sum_{i=1}^{k+1}i & = \left(\sum_{i=1}^{k}i\right) +(k+1)\\ 
-& = \frac{k(k+1)}{2}+k+1 & (\text{by inductive hypothesis})\\
-& = \frac{k(k+1)+2(k+1)}{2}\\
-& = \frac{(k+1)(k+2)}{2}\\
-& = \frac{(k+1)((k+1)+1)}{2}.
-\end{align*}
-\end{proof}
- 
-\begin{proposition}{x.yz}
-Let $n\in \Z$.  
-\end{proposition}
- 
-\begin{proof}[Disproof]%Whatever you put in the square brackets will be the label for the block of text to follow in the proof environment.
-Blah, blah, blah.  I'm so smart.
-\end{proof}
- 
-% --------------------------------------------------------------
-%     You don't have to mess with anything below this line.
-% --------------------------------------------------------------
+\subsection*{Demonstrace}
+\begin{enumerate}
+    \item $N_1 = \{S, A, B, S_1\}$
+    \item $P_1$: 
+            \begin{align*}
+                A&\to Sab  & S&\to Sb\\
+                B&\to Ab   & B&\to Ab\\
+                S&\to A    & A&\to Ba
+            \end{align*}
+    \item $P_1$: 
+            \begin{align*}
+                S_1&\to Aab & S_1&\to B\epsilon
+            \end{align*}
+    \item $G_L = (N_1, \{a,b\}, P_1, S_1)$
+
+\end{enumerate}
+
+\section*{Úloha č.5}
+Podľa Myhill-Nerudovej vety pre jazyk $L$ existuje deterministický konečný automat M taký, že $L(M)
+= L$, práve vtedy ak prefixová ekvivalencia $\sim_L$ má konečný index. 
  
 \end{document}
