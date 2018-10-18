@@ -1,5 +1,5 @@
  
-\documentclass[11pt]{article}
+\documentclass[10pt]{article}
 
 \usepackage[slovak]{babel}
 \usepackage[utf8]{inputenc}
@@ -114,9 +114,11 @@ $A\to Bx, x \in (N\cup\Sigma)^*, A,B \in N$ a $A\to x, x \in (N\cup\Sigma)^*, A 
     \item $P_1 = P_1 \cup \{S\to\epsilon\}$
 \end{enumerate}
 
-\subsection*{Demonstrace}
+\subsection*{Demonštrácia algoritmu}
+Pomocou vyžšie definovaného algoritmu predvedieme príklad transformácie gramatiky $G = (\{S,A,B\}, \{a, b\}, P, S),
+P = \{S\to abA|bS, A\to bB|S|ab, B\to \epsilon | aA \}$:
 \begin{enumerate}
-    \item $N_1 = \{S, A, B, S_1\}$
+    \item $N_1 = \{S, A, B\} \cup \{ S_1\}$
     \item $P_1$: 
             \begin{align*}
                 A&\to Sab  & S&\to Sb\\
@@ -132,7 +134,41 @@ $A\to Bx, x \in (N\cup\Sigma)^*, A,B \in N$ a $A\to x, x \in (N\cup\Sigma)^*, A 
 \end{enumerate}
 
 \section*{Úloha č.5}
+\begin{proof}
 Podľa Myhill-Nerudovej vety pre jazyk $L$ existuje deterministický konečný automat M taký, že $L(M)
-= L$, práve vtedy ak prefixová ekvivalencia $\sim_L$ má konečný index. 
+= L$, práve vtedy ak prefixová ekvivalencia $\sim_L$ má konečný index. Budeme sa teda snažiť
+dokázať, že jazyk $L$ má $\sim_L$ s konečným indexom.
+
+Príslušnosť reťazca $w \in \{a, b\}^*$ do jazyka $L$ je z definície jazyka $L$ podmienená splnením 
+   pomocného predikátu:
+    
+\begin{align*}
+    p(w) \iff \#_a(w) \bmod 3 \neq 0 \land \#_b(w) > 0.
+\end{align*}
+
+\begin{align*}
+    (uw \in L \iff vw \in L) &\iff (p(uw) \iff p(vw)) \\
+    (p(uw) \iff p(vw))  &\iff \#_a(u)\bmod 3 = \#_a(v)\bmod 3 \land ((\#_b(u) > 0 \land \#_b(v) > 0) \lor (\#_b(u) = 0 \land
+\end{align*}
  
+    
+Relácia na jazyku L je teda definovaná nasledovne:
+\begin{align*}
+u \sim_L v \iff \#_a(u)\bmod 3 = \#_a(v)\bmod 3 \land ((\#_b(u) > 0 \land \#_b(v) > 0) \lor (\#_b(u) = 0 \land
+\#_b(v) = 0))
+\end{align*}
+
+Relácia $\sim_L$ nám definuje nasledujúce triedy rozkladu $\Sigma^* / \sim_L$:
+\begin{align*}
+    C_1 &= \{ w \in \Sigma^* | \#_a(w) \bmod 3 = 0 \land \#_b(w) = 0 \} & C_4 &= \{ w \in \Sigma^* | \#_a(w) \bmod 3 = 0 \land \#_b(w) > 0 \} \\
+    C_2 &= \{ w \in \Sigma^* | \#_a(w) \bmod 3 = 1 \land \#_b(w) = 0 \} & C_5 &= \{ w \in \Sigma^* | \#_a(w) \bmod 3 = 1 \land \#_b(w) > 0 \} \\
+    C_3 &= \{ w \in \Sigma^* | \#_a(w) \bmod 3 = 2 \land \#_b(w) = 0 \} & C_6 &= \{ w \in \Sigma^* | \#_a(w) \bmod 3 = 2 \land \#_b(w) > 0 \} \\
+\end{align*}
+
+Jazyk $L$ je zjednotením tried $C_5$ a $C_5$, pretože reťazce tíchto tried spĺňajú logickú formulu
+z definície jazyka $L$, a teda náležia jazyku $L$. Zároveň má rozklad $\Sigma^* / \sim_L$ konečný
+počet tried, teda relácia $\sim_L$ má konečný index a pre jazyk $L$ nutne existuje nejaký DKA taký,
+že $L(M) = L$, teda jazyk $L$ je regulárny. 
+
+\end{proof}
 \end{document}
