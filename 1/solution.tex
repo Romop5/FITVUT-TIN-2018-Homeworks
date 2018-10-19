@@ -92,7 +92,21 @@
 
 
 \section*{Úloha č.3}
-TO BE DONE
+Dôkaz je prevedený pomocou Pumping Lemma. 
+\begin{proof}
+Predpokládajme, že jazyk z úlohy č.2 je regulárnym jazykom. Potom existuje $k > 0$ a reťazec $w =
+a^kb^k$, pre ktorý platí $|w| = 2k \geq k$. Potom platí nasledujúce tvrdenie:
+\begin{align*}
+    \forall x,y,z \in (N \cup \Sigma)^*: |xy| < k \land y \neq \epsilon \land w = xyz: \forall i \in
+    \mathcal{N}_0: xy^iz \in L 
+\end{align*}
+    Nech $\exists l\in \mathcal{N}: x = a^{k-l} \land y = a^{l} \land z = b^k \land l > 0$. Potom musí platiť, že $\forall
+i \in \mathcal{N}_0: xy^iz \in L$.
+
+Uvažujme prípade $i = 0$. Potom $xz \in L$, lenže $a^{k-l}b^k \notin L$, čo je v spore s
+predpokladom, že L je regulárny jazyk. Preto L nie je regulárny jazyk.
+\end{proof}
+
 
 \section*{Úloha č.4}
 
