@@ -93,11 +93,19 @@
         \delta (q_0, 1, Z) &= (q_0, aZ)  & \delta (q_0, 1, a) &= (q_0, aa)\\
         \delta (q_0, 2, Z) &= (q_0, aaZ) & \delta (q_0, 2, a) &= (q_0, aaa)\\
         \delta (q_0, 0, Z) &= (q_0, Z)   & \delta (q_0, 0, a) &= (q_0, a)\\
-        \delta (q_0, c, a) &= (q_1, a)   & \delta (q_0, c, Z) &= (q_1, Z)\\
+        \delta (q_0, \#, a) &= (q_1, a)   & \delta (q_0, \#, Z) &= (q_1, Z)\\
         \delta (q_1, a, a) &= (q_1, \epsilon) & \delta (q_1, b, a) &= (q_2, \epsilon)\\
         \delta (q_1, 0, a) &= (q_1, a)   & \delta (q_2, \epsilon, a) &= (q1, \epsilon)\\
-        \delta (q_1, \epsilon, Z) &= (q3, \epsilon)\\
+        \delta (q_1, \epsilon, Z) &= (q3, \epsilon) & \delta (q_3, \epsilon, Z) &= (q_3, Z)\\
     \end{align*}
+    Diagram výsledného automatu je znázornený na obrázku \ref{automata}.
+
+\begin{figure}
+    \label{automata}
+    \centering
+    \includegraphics{dpda.pdf}
+    \caption{Diagram DZA z úlohy č.2. Automat prijíma prechodom do koncového stavu.}
+\end{figure}
 
 
 \section*{Úloha č.3}
