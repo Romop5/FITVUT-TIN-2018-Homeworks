@@ -37,7 +37,7 @@
 %\renewcommand{\qedsymbol}{\filledbox}
  
 \title{TIN - Domáca úloha č. 1}%replace X with the appropriate number
-\author{Roman Dobiáš - xdobia11}
+\author{Roman Dobiáš - xdobia11@stud.fit.vutbr.cz}
  
 \maketitle
 
@@ -111,17 +111,17 @@
 \section*{Úloha č.3}
 Dôkaz je prevedený pomocou Pumping Lemma. 
 \begin{proof}
-Predpokládajme, že jazyk z úlohy č.2 je regulárnym jazykom. Potom existuje $k > 0$ a reťazec $w =
-a^kb^k$, pre ktorý platí $|w| = 2k \geq k$. Potom platí nasledujúce tvrdenie:
+Predpokládajme, že jazyk L je nekonečným regulárnym jazykom. Potom existuje $k > 0$ a reťazec $w =
+a^k\#a^k$ z jazyka L, pre ktorý platí $|w| = 2k+1$, teda $|w|\geq k$, a platí nasledujúce tvrdenie:
 \begin{align*}
-    \forall x,y,z \in (N \cup \Sigma)^*: |xy| < k \land y \neq \epsilon \land w = xyz: \forall i \in
-    \mathcal{N}_0: xy^iz \in L 
+    \forall x,y,z \in (N \cup \Sigma)^*: w = xyz \land |xy| \leq k \land y \neq \epsilon : \forall i \in
+    \mathbb{N}_0: xy^iz \in L 
 \end{align*}
-    Nech $\exists l\in \mathcal{N}: x = a^{k-l} \land y = a^{l} \land z = b^k \land l > 0$. Potom musí platiť, že $\forall
-i \in \mathcal{N}_0: xy^iz \in L$.
+    Zvoľme ľubovoľné $l\in \mathbb{N}$ a nech platí $x = a^{k-l} \land y = a^{l} \land z = \#a^k \land l > 0$. Potom musí platiť, že $\forall
+i \in \mathbb{N}_0: xy^iz \in L$.
 
-Uvažujme prípade $i = 0$. Potom $xz \in L$, lenže $a^{k-l}b^k \notin L$, čo je v spore s
-predpokladom, že L je regulárny jazyk. Preto L nie je regulárny jazyk.
+Uvažujme prípade $i = 0$. Potom by podľa prepokladu malo platiť $xz \in L$, lenže zjavne platí
+    $a^{k-l}\#a^{k} \notin L$, čo je v spore s predpokladom, že L je regulárny jazyk. Preto L nie je regulárny jazyk.
 \end{proof}
 
 
