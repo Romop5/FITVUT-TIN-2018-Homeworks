@@ -54,13 +54,13 @@
     Z vety 3.23 (skripta, str. 50) vieme, že trieda jazykov $\mathcal{L}_3$ je uzavretá voči
     $\cup$ a $\cap$ voči triede $\mathcal{L}_3$, a doplnku ku $\Sigma^{*}$.
             Nakoľko doplnok aj prienik sú uzavreté operácie v $\mathcal{L}_3$, potom $L_1 \cap
-    \overline{L_2} \in \mathcal{L}_3$,a vzhľadom na ekvivalenciu potom aj $L_1 \setminus L_2 \in
+    \overline{L_2} \in \mathcal{L}_3$,a vzhľadom na úpravu potom aj $L_1 \setminus L_2 \in
     \mathcal{L}_3$. 
     \end{proof}
 \item 
     %%% 1 b)    
     \begin{proof}
-    Nech $L_1 \in \mathcal{L}_3, L_2 \in \mathcal{L}_2^D$. Z vety 4.27 vieme, že trieda
+        Nech $L_1 \in \mathcal{L}_3, L_2 \in \mathcal{L}_2^D$. Z vety 4.27 (skriptá) vieme, že trieda
         $\mathcal{L}_2^D$ je uzavretá voči prieniku s jazykom triedy $\mathcal{L}_3^D$ a voči
         doplnku. 
         Preto $\overline{L_2} \in \mathcal{L}_2^D$ a zrejme $L_1 \cap \overline{L_2} \in
@@ -75,7 +75,7 @@
         (\{q_0\},\Sigma, \delta, q_0, \{q_0\})$, kde $\forall a \in \Sigma : \delta(q_0, a) = q_0$.
     Zároveň nech $L_2 \in \mathcal{L}_2$.
 
-        Predpokladajme, že $\Sigma* \setminus L_2 \in \mathcal{L}_2$. Potom nasledujúcou úpravou
+        Predpokladajme, že $\Sigma^* \setminus L_2 \in \mathcal{L}_2$. Potom nasledujúcou úpravou
         dostávame:
         \begin{align*}
             \Sigma^* \setminus L_2 = \{w | w \in \Sigma^* \land w \notin L_2 \} = \overline{L_2} 
@@ -98,7 +98,8 @@
         \delta (q_1, 0, a) &= (q_1, a)   & \delta (q_2, \epsilon, a) &= (q1, \epsilon)\\
         \delta (q_1, \epsilon, Z) &= (q3, \epsilon) & \delta (q_3, \epsilon, Z) &= (q_3, Z)\\
     \end{align*}
-    Diagram výsledného automatu je znázornený na obrázku \ref{automata}.
+    Diagram výsledného automatu je znázornený na obrázku \ref{automata}. Výsledný DZA prijíma
+    reťazec prechodom do koncového stavu a prečítaním celého vstupného reťazca.
 
 \begin{figure}
     \label{automata}
@@ -114,33 +115,36 @@ Dôkaz je prevedený pomocou Pumping Lemma.
 Predpokládajme, že jazyk L je nekonečným regulárnym jazykom. Potom existuje $k > 0$ a reťazec $w =
 a^k\#a^k$ z jazyka L, pre ktorý platí $|w| = 2k+1$, teda $|w|\geq k$, a platí nasledujúce tvrdenie:
 \begin{align*}
-    \forall x,y,z \in (N \cup \Sigma)^*: w = xyz \land |xy| \leq k \land y \neq \epsilon : \forall i \in
+    \exists x,y,z \in (N \cup \Sigma)^*: w = xyz \land |xy| \leq k \land y \neq \epsilon : \forall i \in
     \mathbb{N}_0: xy^iz \in L 
 \end{align*}
-    Zvoľme ľubovoľné $l\in \mathbb{N}$ a nech platí $x = a^{k-l} \land y = a^{l} \land z = \#a^k \land l > 0$. Potom musí platiť, že $\forall
+    Zvoľme ľubovoľné $l,n \in \mathbb{N}$ také, že platí $x = a^{n} \land y = a^{l} \land z =
+    a^{k-l-n}\#a^k \land l > 0 \land n \geq 0 \land l+n \leq k$. Potom musí platiť, že $\forall
 i \in \mathbb{N}_0: xy^iz \in L$.
 
-Uvažujme prípade $i = 0$. Potom by podľa prepokladu malo platiť $xz \in L$, lenže zjavne platí
-    $a^{k-l}\#a^{k} \notin L$, čo je v spore s predpokladom, že L je regulárny jazyk. Preto L nie je regulárny jazyk.
+Uvažujme prípad $i = 0$. Potom by podľa prepokladu malo platiť $xz \in L$, lenže zjavne platí
+    $a^{n}a^{k-l-n}\#a^{k} = a^{k-l}\#a^{k} \notin L$, čo je v spore s predpokladom, že L je regulárny jazyk. Preto L nie je regulárny jazyk.
 \end{proof}
 
 
 \section*{Úloha č.4}
 
 \textbf{Vstup:} Pravá lineárna gramatika $G_P = (N, \Sigma, P, S)$ taká, že $P$ obsahuje len pravidlá typu
-$A\to xB, x \in (N\cup\Sigma)^*, A,B \in N$ a $A\to x, x \in (N\cup\Sigma)^*, A \in N$\\
+$A\to xB, x \in (N\cup\Sigma)^*, A,B \in N$ a typu $A\to x, x \in (N\cup\Sigma)^*, A \in N$\\
 \textbf{Výstup:} Ľavá lineárna gramatika $G_L = (N_1, \Sigma, P_1, S_1)$ taká, že $P$ obsahuje len pravidlá typu
-$A\to Bx, x \in (N\cup\Sigma)^*, A,B \in N$ a $A\to x, x \in (N\cup\Sigma)^*, A \in N$\\
+$A\to Bx, x \in (N\cup\Sigma)^*, A,B \in N$ a typu $A\to x, x \in (N\cup\Sigma)^*, A \in N$\\
 \textbf{Metóda:}
 \begin{enumerate}
     \item $N_1 = N \cup \{S_1\}$
-    \item Pre každé pravidlo z množiny $P$ typu $A\to xB, A,B \in N, x \in (N\cup\Sigma)^*$:\\
+    \item Pre každé pravidlo z množiny $P$ typu $A\to xB, A,B \in N, x \in (N\cup\Sigma)^*$ pridaj
+        do množiny pravidiel $P_1$ pravidlo:\\
         \begin{align*}
-            (B,Ax) \in P_1 \iff (A, xB) \in P
+            B\to Ax
         \end{align*}
-    \item Pre každé pravidlo z množiny $P$ typu $A\to x, A \in N, x \in (N\cup\Sigma)^*$:\\
+    \item Pre každé pravidlo z množiny $P$ typu $A\to x, A \in N, x \in (N\cup\Sigma)^*$ pridaj do
+        množiny pravidiel $P_1$ pravidlo:\\
         \begin{align*}
-            (S_1,Ax) \in P_1 \iff (A, x) \in P
+            S_1\to Ax
         \end{align*}
     \item $P_1 = P_1 \cup \{S\to\epsilon\}$
 \end{enumerate}
@@ -165,25 +169,13 @@ P = \{S\to abA|bS, A\to bB|S|ab, B\to \epsilon | aA \}$:
 \end{enumerate}
 
 \section*{Úloha č.5}
-\begin{proof}
 Podľa Myhill-Nerudovej vety pre jazyk $L$ existuje deterministický konečný automat M taký, že $L(M)
 = L$, práve vtedy ak prefixová ekvivalencia $\sim_L$ má konečný index. Budeme sa teda snažiť
 dokázať, že jazyk $L$ má $\sim_L$ s konečným indexom.
 
-Príslušnosť reťazca $w \in \{a, b\}^*$ do jazyka $L$ je z definície jazyka $L$ podmienená splnením 
-   pomocného predikátu:
-    
-\begin{align*}
-    p(w) \iff \#_a(w) \bmod 3 \neq 0 \land \#_b(w) > 0.
-\end{align*}
-
-\begin{align*}
-    (uw \in L \iff vw \in L) &\iff (p(uw) \iff p(vw)) \\
-    (p(uw) \iff p(vw))  &\iff \#_a(u)\bmod 3 = \#_a(v)\bmod 3 \land ((\#_b(u) > 0 \land \#_b(v) > 0) \lor (\#_b(u) = 0 \land
-\end{align*}
- 
-    
-Relácia na jazyku L je teda definovaná nasledovne:
+\begin{proof}
+Vzhľadom na predikát, ktorý určtuje príslušnosť daného reťazca do jazyka L, je možné definovať
+    reláciu prefixovej ekvivalencie na jazyku L nasledovne:
 \begin{align*}
 u \sim_L v \iff \#_a(u)\bmod 3 = \#_a(v)\bmod 3 \land ((\#_b(u) > 0 \land \#_b(v) > 0) \lor (\#_b(u) = 0 \land
 \#_b(v) = 0))
@@ -196,10 +188,27 @@ Relácia $\sim_L$ nám definuje nasledujúce triedy rozkladu $\Sigma^* / \sim_L$
     C_3 &= \{ w \in \Sigma^* | \#_a(w) \bmod 3 = 2 \land \#_b(w) = 0 \} & C_6 &= \{ w \in \Sigma^* | \#_a(w) \bmod 3 = 2 \land \#_b(w) > 0 \} \\
 \end{align*}
 
+Relácia $\sim_L$ rozdelí množinu $\Sigma^*$ na \textbf{6 tried ekvivalencie}. Počet tried vyplýva z
+    počtu rôznych možností ohodnotenia funkcie $\#_a(x) \bmod 3$, ktorých je konečne, konkrétne 3, a faktu, že buď pre reťazec
+    platí $\#_b(x) = 0$ alebo neplatí. Výsledný počet tried je daný počtom kombinácii oboch
+    podmienok.   
+
 Jazyk $L$ je zjednotením tried $C_5$ a $C_5$, pretože reťazce tíchto tried spĺňajú logickú formulu
 z definície jazyka $L$, a teda náležia jazyku $L$. Zároveň má rozklad $\Sigma^* / \sim_L$ konečný
 počet tried, teda relácia $\sim_L$ má konečný index a pre jazyk $L$ nutne existuje nejaký DKA taký,
 že $L(M) = L$, teda jazyk $L$ je regulárny. 
-
 \end{proof}
+\newtheorem*{remark}{Poznámka}
+\begin{remark}
+DKA automat pre tento jazyk je znázornený na obrázku 2. Jednotlivé stavy automatu odpovedajú
+    triedam rozkladu $\Sigma^* / \sim_L$.
+\end{remark}
+\begin{figure}[h!]
+    \label{automata}
+    \centering
+    \includegraphics[height=6cm]{dfa.pdf}
+    \caption{Diagram DFA z úlohy č.5.}
+\end{figure}
+
+
 \end{document}

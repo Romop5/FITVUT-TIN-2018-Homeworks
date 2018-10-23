@@ -1,0 +1,26 @@
+digraph finite_state_machine {
+    rankdir=LR;
+    node [shape = point, color=white, fontcolor=white]; start;
+    node [shape = doublecircle, color=black, fontcolor=black]; q5;
+    node [shape = doublecircle, color=black, fontcolor=black]; q6;
+    node [shape = circle]; q1;
+    node [shape = circle]; q2;
+    node [shape = circle]; q3;
+    node [shape = circle]; q4;
+    start -> q1 [ label = "" ];
+      q1 -> q2 [ label = "a"];
+      q2 -> q3 [ label = "a"];
+      q3 -> q1 [ label = "a"];
+
+      q1 -> q4 [ label = "b"];
+      q2 -> q5 [ label = "b"];
+      q3 -> q6 [ label = "b"];
+
+      q4 -> q4 [ label = "b"];
+      q5 -> q5 [ label = "b"];
+      q6 -> q6 [ label = "b"];
+
+      q6 -> q4 [ label = "a"];
+      q4 -> q5 [ label = "a"];
+      q5 -> q6 [ label = "a"];
+}
