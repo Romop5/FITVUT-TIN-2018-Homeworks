@@ -1,0 +1,92 @@
+ 
+\documentclass[10pt]{article}
+
+\usepackage[slovak]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+
+\usepackage{times}
+
+
+\usepackage[margin=1in]{geometry} 
+\usepackage{amsmath,amsthm,amssymb}
+ 
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+ 
+\newenvironment{theorem}[2][Theorem]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{lemma}[2][Lemma]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{exercise}[2][Exercise]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{reflection}[2][Reflection]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{proposition}[2][Proposition]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{corollary}[2][Corollary]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+ 
+\begin{document}
+ 
+% --------------------------------------------------------------
+%                         Start here
+% --------------------------------------------------------------
+ 
+%\renewcommand{\qedsymbol}{\filledbox}
+ 
+\title{TIN - Domáca úloha č. 2}%replace X with the appropriate number
+\author{Roman Dobiáš - xdobia11@stud.fit.vutbr.cz}
+ 
+\maketitle
+
+\section*{Úloha č.1}
+Podľa definície 4.29 (opora, str. 97) je Dyckov jazyk na jednou dvojicou [] generovaný 
+gramatikou s nasledujúcimi pravidlami, ktorú označme $G_D$:
+\begin{align*}
+    S \to [ S ] | SS | \epsilon
+\end{align*}
+Pre túto gramatiku zjavne platí, že každá postupnosť derivácii vedie ku terminálnemu reťazcu.
+
+Uvažujme neprázdny reťazec $w \in L$. Uvažujme prvú deriváciu štartujúceho nonterminálu $S$ v
+gramatike $G_D$. Potom podľa definície gramatiky $G_D$ sú 3 možnosti, ktoré pravidlo mohlo byť
+použité v prvej derivácii pri generovaní reťazca $w$:
+\begin{enumerate}
+    \item Pravidlo $S \to \epsilon$\\
+        Potom $S \Rightarrow \epsilon$, teda $w = \epsilon$, čo je v spore s predpokladom, že
+        $w$ je neprázdny reťazec. Pravidlo teda nemôže byť použité v prvej derivácii.
+    \item Pravidlo $S \to [S]$\\
+        Potom $S \Rightarrow [S] \Rightarrow^+ w$. Potom je reťazec $w$ nutne konkatenáciou
+        tvaru $[u], u \in L$, pretože S je počiatočný nonterminál gramatiky $G_D$, teda derivuje
+        slovo $u \in L$. Zároveň platí, že $|w| =  2+|u|$.
+    \item Pravidlo $S \to SS$\\
+        Vieme, že $w$ je neprázdne. V gramatike $G_D$ obsahuje len jedno pravidlo terminálne symboly,
+        preto zjavne pravidlo $S \to [S]$ musí byť použité aspoň raz v postupnosti derivácii vetnej
+        formy $SS$. Nutne teda platí, že z vetnej formy $SS$ deriváciami získame vetnú formu $S^N$.
+        Zjavne aspoň jedno $S$ musí byť prepísané pravidlom $S \to [S]$. Zaujíma nás ten najľavejší
+        prepísaný nonterminál $S$. Potom vzniknutá vetná forma má tvar $[S]S^N$. Zjavne platí, že
+        $S \Rightarrow SS \Rightarrow SSS \Rightarrow^* S^N \Rightarrow v, v \in L$. Teda reťazec $w$
+        je konkatenáciou $[u]v$, kde $S\Rightarrow^*u$ a $S \Rightarrow* S^N \Rightarrow* v$. Zjavne
+        $|w| = 2 + |u|+|v|$.
+\end{enumerate}
+Ukázali sme teda, že každý neprázdny reťazec $w \in L$ je možné rozložiť na $[u]v, u,v \in L$.
+
+\begin{proof}
+    Dokazujeme, že $\forall i \in N: \forall w \in L: \#_[(w) = i \implies w \in L(G)$.\\
+    Pre $i = 0$ tvrdenie platí, pretože $\epsilon \in L \land \#_[(\epsilon) = 0) \land \epsilon \in
+    L(G).$ \\
+
+    Predpokladajme, že tvrdenie platí pre $j <  i$ a uvažujme indukčnú hypotézu $i = j+1 \land
+    \forall w \in L: \#_[(w) = i \implies w \in L(G)$.
+
+    V a) sme ukázali, že pre $\forall w \in L: \exists u,v \in L: w = [u]v$. Teda isto platí, že
+    $\forall w \in L \land \#_[(w) = i: \exists u,v \in L: w = [u]v$ a platí, že $\#_[(u) < i$ a zároveň
+    $\#_[(v) < i$, pretože konkatenácia $[u]v$ pridáva reťazcu $w$ nutne o jeden symbol $[$ viac.
+    Teda nutne $u,v \in L(G)$, pretože pre všetky $w\in L, \#_[(w) < i$ je veta už dokázaná. Zároveň $S \Rightarrow_G [S]S \Rightarrow_G^* [u]v$,
+    teda $[u]v \in L(G)$, čiže $w \in L(G)$. \\
+
+    Tvrdenie teda platí pre $i = j + 1$, kde pre $j$ je dokázané, teda platí pre $\forall i \in N$. 
+\end{proof}
+
+\end{document}
