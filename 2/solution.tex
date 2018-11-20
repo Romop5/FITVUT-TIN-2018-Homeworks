@@ -90,13 +90,128 @@ Ukázali sme teda, že každý neprázdny reťazec $w \in L$ je možné rozloži
 \end{proof}
 
 
+\section*{Úloha č.2}
+Dôkaz predvedieme pomocou Pumping Lemma pre bezkontextové jazyky. Dokážeme, že jazyk nie je
+bezkontextový.
+
+\begin{proof}
+Nech $L$ je bezkontextový jazyk nad abecedou $\Sigma$. Potom existuje konštanta $k > 0$ taká, že platí:
+    \begin{align}
+        \forall z \in L \land |z| \geq k: \exists u,v,w,x,y \in \Sigma^*: z = uvwxy \land |vwx| \leq
+        k \land \forall i \geq 0: uv^iwx^iy \in L
+    \end{align}
+Nech existuje konštanta $k > 0$ a reťazec $z=a^p$, kde $p$ je prvočíslo a zároveň $p > n$. Potom
+podľa Pumping Lemma platí, že:
+    \begin{align}
+        \exists u,v,w,x,y \in \Sigma^*: z = uvwxy \land |vwx| \leq
+        k \land \forall i \geq 0: uv^iwx^iy \in L
+    \end{align}
+Uvažujme ľubovoľné konštanty $b, c \in N$ také, že $a^ba^c \neq \epsilon$ a $u = a^b \land v =
+    a^c$. Zároveň zvoľme ľubovoľne $uwz$ tak, nech platí, že $z = uvwxy$.
+    Plati, že $uvwxy = ua^bwa^cy \in L$.
+
+Uvažujme iteráciu pumpovania $i = 1+p$. 
+    Potom $|uv^{i+p}wx^{i+p}y| = |ua^{b*(1+p)}wa^{c*(1+p)}y| = |ua^{b+bp}wa^{c+cp}y| = |ua^bwa^cy| +
+    |a^{bp}|+|a^{cp}| = p + bp + cp = p(1+b+c)$. 
+    Podľa predpokladu má platiť, že $uv^{i+p}wx^{i+p}y \in L$, avšak dĺžka tohoto reťazca je
+    $p(1+b+c)$, čo je súčin prirodzených čísiel, teda nie je prvočíslom, teda $uv^{i+p}wx^{i+p}y \notin L$, čo je spor
+    predpokladu. 
+    Jazyk ${a^p | p je prvočíslo}$ nie je bezkontextovy.
+\end{proof}
+
+
+
 \section*{Úloha č.3}
+Redukcia
+\begin{enumerate}
+    \item MP problém $\{<M>\#<w> |$ TS M zastaví na reťazci s kódom w$\}$
+    \item Affine problém $\{<M>| $jazyk TS M obsahuje aspoň 1 reťazec z jazyka Affine$\}$
+\end{enumerate}
 Idea sigmy
 \begin{enumerate}
-    \item použijeme UTS na simulaciu <M> na <w>. Ak UTS cyklí, potom jazyk Affine je prázdny (a
-        <M>#<w> nepatrí do MP. Ak
-        zastaví, tak prijimeme ak reťazec <y> patrí do Affine. POZOR: Affine musi nutne vzdy
-        obsahovat aspon jeden retazec.
+    \item Pre danú inštanciu MP problému Sigma vygeneruje kód TS taký, že:
+    \item TS vymaže svoju vstupnú pásku
+    \item TS skontroluje zda pôvodný TS <M> je well-formed (nie je garbage), ak nie je well-formed,
+        odmietne.
+    \item TS skopíruje kód reťazca <w> na svoju pásku
+    \item TS pomocou UTS simuluje <M> na kóde <w>
+    \item Ak UTS cyklí, potom jazyk TS je prázdny, teda neobsahuje reťazec z Affine (a
+        <M>\#<w> nepatrí do MP.)
+    \item Ak zastaví, tak TS prijime.
 \end{enumerate}
+Skúmajme jazyk L(Mx):
+\begin{enumerate}
+    \item $L(Mx) = \emptyset \iff$ <M> nie je well-formed alebo TS <M> na slove <w> nezastaví
+    \item $L(Mx) = \Sigma^* \iff$ <M> je well-formed a <M> zastaví na <w>
+\end{enumerate}
+Ekvivalencia
+\begin{enumerate}
+    \item TS M prijme <w> $\iff$ TS M je správne sformovaný a TS <M> na slove <w> zastaví $\iff L(Mx) =
+        \Sigma^* \iff$ TS <M> taký, že jazyk L(M) obsahuje aspoň jeden reťazec z jazyka Affine
+\end{enumerate}
+\section*{Úloha č.4}
+\subsection*{TS na RationalC}
+Prevod TS na RationalC sa skladá z nasledujúcich částí
+\begin{enumerate}
+    \item Prevod pásky $w$ na $x_0$\\
+        Páska $w$ obsahujúca znaky $0,1,\Delta$ je prevedená nasledujúco:
+        \begin{enumerate}
+            \item 0 je vyjadrená ako 10
+            \item 1 je vyjadrená ako 11
+            \item $\Delta$ je vyjadrená ako 00
+        \end{enumerate}
+        Po prevedení symbolov w na takéto binárne kódovanie je výsledný reťazec interpretovaný ako
+        binárne zakódované racionálne číslo, ktorého desatinná čiarka je za prvými dvoma binárnymi
+        číslami (za prvou dvojicou).
+        Príklad w: $\Delta011\Delta$ sa zobrazí na $00. 10 11 11 00$, teda na racionálne číslo
+        $0.734375$. Vďaka tomuto zakódovaniu obsahuje racionálne číslo nekonečno znakov
+        reprezentujúcich $\Delta$ z prava aj z ľava pôvodonej pásky $w$, pretože dvojica 00 pridaná
+        pred aj na koniec binárnej reprezentácie čísla nemení jeho význam.
+    \item Prevod jednotlivých pravidiel TS na príkazy jazyka RacionalC
+        Jednotlivé stavy TS sú v RationalC reprezentované sekvenciou príkazov. 
+        Keďže jednotlivé symboly TS sú v RationalC reprezentované dvojicami bitov racionálneho čísla, potom posun hlavy je
+        realizovaný 2x násobením alebo 2x delením, čo má za následok posun desatinnej čiarky o
+        dvojicu bitov.
+        Pre každý prechod p TS zo stavu q je vygenerovaný príkaz nasledujúco:
+\end{enumerate}
+        \begin{verbatim}
+        q: x /= 2   
+        q+1 if x \% 2 == 0 goto q-6 
+        q+2 x *= 2
+        q+3 if x \% 2 == 0 goto q-0 
+        q+4 if x \% 2 == 1 goto q-1 
+        q+5 return B;
+        q+6 x *= 2
+        q+7 if x \% 2 == 0 goto q-delta
+        q+8 if x \% 2 == 1 goto q-delta
+        \end{verbatim}
+        Hodnota $B$ riadku $q+5$ je 0 pre nekoncový stav a $1$ pre $q_f$.
+        V prípade, že stav $q$ neobsahuje prechod pre daný symbol z $\Gamma$, je daný riadok
+        nahradený prázdnym riadkom (pre $\Delta$ riadok $q+1$, pre $0$ $q+3$, pre $1$ $q+4$.
+
+        Povšimnime si, že ak stav nie je koncový a zároveň neobsahuje v TS žiaden prechod, RationalC
+        skončí program s návratovou hodnotou 0, čo je ekvivalentné abnormálnemu zastaveniu TS na
+        nedefinovanom prechode.
+
+        Symboly $q-delta, q-0, q-1$ tvaru $Q-\Gamma$ predsavujú symbolický vyjadrenie čísla riadku, ktorý
+        reprezentuje sekvenciu príkazov vykonávajúci konkrétny prechod.
+        Napríklad prechodu $\delta(q, 0) = (p, L)$ zodpovedá sekvencia na adrese $q-0$:
+        \begin{verbatim}
+        q-0: x /=2
+        x /=2
+        if \% 2 == 0 goto p
+        if \% 2 == 1 goto p
+        \end{verbatim}
+        Pre prechod R získame sekvenciu analogicky, nahradením x /=2 za x *=2.
+        Pri zápise symbolu z abecedy $\Gamma$ nahradíme dvojicu násobení / delení nasledujúcou
+        sekvenciou:
+        \begin{enumerate}
+            \item Zápis $\Delta$ ako 00: x = even(x); x /= 2; x = even(x); x */ 2;
+            \item Zápis $0$ ako 10: x = even(x); x /= 2; x = odd(x); x */ 2;
+            \item Zápis $0$ ako 11: x = odd(x); x /= 2; x = odd(x); x */ 2;
+        \end{enumerate}
+        Príkazy $odd()$ a $even()$ pracujú s bitom racionálneho čísla pred desatinnou čiarkou, teda
+        umožňujú simulovať zápis znaku na dvojici bitov, ktorá je pred desatinnou čiarkou, teda
+        odpovedá pôvodnemu symbolu pod hlavou v TS.
 
 \end{document}
