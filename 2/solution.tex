@@ -150,7 +150,7 @@ Ekvivalencia
         \Sigma^* \iff$ TS <M> taký, že jazyk L(M) obsahuje aspoň jeden reťazec z jazyka Affine
 \end{enumerate}
 \section*{Úloha č.4}
-\subsection*{TS na RationalC}
+\subsection*{A - TS na RationalC}
 Prevod TS na RationalC sa skladá z nasledujúcich částí
 \begin{enumerate}
     \item Prevod pásky $w$ na $x_0$\\
@@ -213,5 +213,33 @@ Prevod TS na RationalC sa skladá z nasledujúcich částí
         Príkazy $odd()$ a $even()$ pracujú s bitom racionálneho čísla pred desatinnou čiarkou, teda
         umožňujú simulovať zápis znaku na dvojici bitov, ktorá je pred desatinnou čiarkou, teda
         odpovedá pôvodnemu symbolu pod hlavou v TS.
+
+        Ošetrenie prepadnutia hlavy:
+        Racionálne číslo obsahuje špeciálnu dvojicu bitov 01 na začiatku reťazca (na najvyžšich
+        pozíciach). Na začiatku sekvencie zodpovedajúcej vykonániu stavu $q \in Q$ pribudne
+        sekvencia, ktorá skontroluje, či sa aktuálna dvojica bitov pred desatinnou čiarkou nerovná
+        špeciálnemu symbolu reprezentujúcemu prepadnutie hlavy. Ak áno, potom program končí hodnotou
+        0. Inak pokračuje vykonávanie stavu.
+
+
+\subsection*{B - RationalC na TS}
+Racionálne číslo $x_0$ môžeme reprezentovať ako binárne kódovaný číslo. Na počiatku má teda páska
+tvar $\Delta w \Delta$, kde w je binárne zakódované racionálne číslo a zároveň obsahuje TS sekvenciu
+prechodov do prava, ktoré posunú hlavu na tú pozíciu, ktorá v pôvodnom racionálnom čísle
+predstavovala desatinnú čiarku. Desatinná čiarka simulovaného registra $x_0$ sa v TS nachádza vždy
+za pozíciou hlavy.
+Prechod TS s posunutím hlavy doprava realizuje príkaz $x *= 2$, doľava zas $x /= 2$. Príkaz odd /
+even sú realizované ako zápis symbolu 1 / 0 pod hlavou.
+Každý riadok s príkazom programu RationalC je realizovaný ako jeden unikátny stav v TS.
+Príkazy $x *= 2 / x /= 2$ sú prechody z aktuálneho stavu do stavu a posunutím hlavy,
+príkazy even() či odd() zas zápisom symbolu pod hlavou na páske TS.
+Príkaz return 1; predstavuje prechod pod ľubovoľným symbolom $\Sigma$ do koncového stavu TS,
+príkaz return 0 zas spustenie podprogramu, ktorý bude nekonečne cykliť do prava.
+Pre všetky stavy je pod symbolom \Delta pridaný podprogram, ktorý skočí na prvý \Delta na pravo od
+hlavy, vyvolá shift right, skočí na prvý delta na ľavo a zapíše do neho symbol 0.
+Týmto spôsobom je ošetrená situácia, kedy sa racionálne číslo delením rozšíruje smerom do ľava
+(nulami), čo by spôsobilo prepadnutie hlavy v TS. 
+Tak isto, pri násobení čísla tento podprogram korektne ošetrí rozšírenie binárneho kódovania o 0
+zprava.
 
 \end{document}
