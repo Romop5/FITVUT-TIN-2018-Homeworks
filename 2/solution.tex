@@ -44,10 +44,14 @@
 \section*{Úloha č.1}
 Podľa definície 4.29 (opora, str. 97) je Dyckov jazyk na jednou dvojicou [] generovaný 
 gramatikou s nasledujúcimi pravidlami, ktorú označme $G_D$:
-\begin{align*}
+\begin{align}
     S \to [ S ] | SS | \epsilon
-\end{align*}
+\end{align}
 Pre túto gramatiku zjavne platí, že každá postupnosť derivácii vedie ku terminálnemu reťazcu.
+
+\subsection*{Čásť A}
+V tejto časti ukážeme, že každý neprázdny reťazec $w \in L$ je možné vyjadriť v tvare $w = [u]v$,
+kde $u,v \in L$.
 
 Uvažujme neprázdny reťazec $w \in L$. Uvažujme prvú deriváciu štartujúceho nonterminálu $S$ v
 gramatike $G_D$. Potom podľa definície gramatiky $G_D$ sú 3 možnosti, ktoré pravidlo mohlo byť
@@ -58,8 +62,8 @@ použité v prvej derivácii pri generovaní reťazca $w$:
         $w$ je neprázdny reťazec. Pravidlo teda nemôže byť použité v prvej derivácii.
     \item Pravidlo $S \to [S]$\\
         Potom $S \Rightarrow [S] \Rightarrow^+ w$. Potom je reťazec $w$ nutne konkatenáciou
-        tvaru $[u], u \in L$, pretože S je počiatočný nonterminál gramatiky $G_D$, teda derivuje
-        slovo $u \in L$. Zároveň platí, že $|w| =  2+|u|$.
+        tvaru $[u]v$, kde $u \in L \land v = \epsilon \land \epsilon \in L$, pretože S je počiatočný nonterminál gramatiky $G_D$, teda derivuje
+        slovo $u \in L$. Zároveň zjavne platí, že $|w| =  2+|u|$ a $\#_[(w) = \#_[(u) + 1$. 
     \item Pravidlo $S \to SS$\\
         Vieme, že $w$ je neprázdne. V gramatike $G_D$ obsahuje len jedno pravidlo terminálne symboly,
         preto zjavne pravidlo $S \to [S]$ musí byť použité aspoň raz v postupnosti derivácii vetnej
@@ -70,23 +74,33 @@ použité v prvej derivácii pri generovaní reťazca $w$:
         je konkatenáciou $[u]v$, kde $S\Rightarrow^*u$ a $S \Rightarrow* S^N \Rightarrow* v$. Zjavne
         $|w| = 2 + |u|+|v|$.
 \end{enumerate}
-Ukázali sme teda, že každý neprázdny reťazec $w \in L$ je možné rozložiť na $[u]v, u,v \in L$.
+Ukázali sme teda, že každý neprázdny reťazec $w \in L$ je možné rozložiť na $[u]v$, kde $u,v \in L$.
 
+\subsection*{Čásť B}
 \begin{proof}
-    Dokazujeme, že $\forall i \in N: \forall w \in L: \#_[(w) = i \implies w \in L(G)$.\\
-    Pre $i = 0$ tvrdenie platí, pretože $\epsilon \in L \land \#_[(\epsilon) = 0) \land \epsilon \in
-    L(G).$ \\
+    Dokazujeme, že $\forall i \in \mathbb{N}_0: \forall w \in L: \#_[(w) = i \implies w \in L(G)$. V dokaze
+    využívame gramatiku $G_D$, definovanú vyžšie (1). Pokiaľ derivácia nie je označená konkrétnou
+    gramatikou, implicitne uvažujeme gramatiku $G$ zo zadania úlohy.\\
 
-    Predpokladajme, že tvrdenie platí pre $j <  i$ a uvažujme indukčnú hypotézu $i = j+1 \land
-    \forall w \in L: \#_[(w) = i \implies w \in L(G)$.
+    Pre $i = 0$ tvrdenie platí, pretože epsilon je jediný reťazec v jazyku L taký, že $\#_[(\epsilon)
+    = 0)$, zároveň platí, že $S \Rightarrow_{G_D} \epsilon$, teda $\epsilon \in L$ a tiež $S
+    \Rightarrow_{G} \epsilon$, teda $\epsilon \in L(G)$. 
 
+    Predpokladajme, že tvrdenie platí pre $j <  i$ a uvažujme platnosť tvrdenia $\forall w \in L: \#_[(w) = i \implies w \in L(G)$
+    pre $i = j+1$.
+    
     V a) sme ukázali, že pre $\forall w \in L: \exists u,v \in L: w = [u]v$. Teda isto platí, že
     $\forall w \in L \land \#_[(w) = i: \exists u,v \in L: w = [u]v$ a platí, že $\#_[(u) < i$ a zároveň
     $\#_[(v) < i$, pretože konkatenácia $[u]v$ pridáva reťazcu $w$ nutne o jeden symbol $[$ viac.
-    Teda nutne $u,v \in L(G)$, pretože pre všetky $w\in L, \#_[(w) < i$ je veta už dokázaná. Zároveň $S \Rightarrow_G [S]S \Rightarrow_G^* [u]v$,
-    teda $[u]v \in L(G)$, čiže $w \in L(G)$. \\
+    Teda nutne $u,v \in L(G)$, pretože pre všetky $w\in L, \#_[(w) < i$ je veta už dokázaná. 
+    Zároveň v gramatike G existuje pravidlo $S\to [S]S$, a kedže $u,v \in L(G)$, potom nutne existujú
+    postupnosti derivácii $S\Rightarrow^* u$ a $S\Rightarrow^* v$.
 
-    Tvrdenie teda platí pre $i = j + 1$, kde pre $j$ je dokázané, teda platí pre $\forall i \in N$. 
+    Dohromady v G existuje derivácia $S\Rightarrow [S]S \Rightarrow^* [u]S \Rightarrow^* [u]v$. Potom ale $w = [u]v$
+    nutne patrí do L(G).
+
+    Tvrdenie teda platí pre $i = j + 1$, kde pre $j$ je dokázané, teda platí pre $\forall i \in
+    \mathbb{N}_0$. 
 \end{proof}
 
 
@@ -100,55 +114,100 @@ Nech $L$ je bezkontextový jazyk nad abecedou $\Sigma$. Potom existuje konštant
         \forall z \in L \land |z| \geq k: \exists u,v,w,x,y \in \Sigma^*: z = uvwxy \land |vwx| \leq
         k \land \forall i \geq 0: uv^iwx^iy \in L
     \end{align}
-Nech existuje konštanta $k > 0$ a reťazec $z=a^p$, kde $p$ je prvočíslo a zároveň $p > n$. Potom
+Nech existuje konštanta $k > 0$ a reťazec $z=a^p$, kde $p$ je prvočíslo a zároveň $p > k$. Potom
 podľa Pumping Lemma platí, že:
     \begin{align}
         \exists u,v,w,x,y \in \Sigma^*: z = uvwxy \land |vwx| \leq
         k \land \forall i \geq 0: uv^iwx^iy \in L
     \end{align}
-Uvažujme ľubovoľné konštanty $b, c \in N$ také, že $a^ba^c \neq \epsilon$ a $u = a^b \land v =
-    a^c$. Zároveň zvoľme ľubovoľne $uwz$ tak, nech platí, že $z = uvwxy$.
+    Uvažujme ľubovoľné konštanty $b, c,d \in \mathbb{N}_0$ také, že $a^ba^c \neq \epsilon$ a $u = a^b \land x =
+    a^c \land w = a^d$ tak, že $|uwx| \leq k$ Zároveň zvoľme ľubovoľne $uy$ tak, nech platí, že $z = uvwxy$.
     Plati, že $uvwxy = ua^bwa^cy \in L$.
 
 Uvažujme iteráciu pumpovania $i = 1+p$. 
-    Potom $|uv^{i+p}wx^{i+p}y| = |ua^{b*(1+p)}wa^{c*(1+p)}y| = |ua^{b+bp}wa^{c+cp}y| = |ua^bwa^cy| +
+    Potom $|uv^{i}wx^{i}y| = |uv^{1+p}wx^{1+p}y| = |ua^{b*(1+p)}wa^{c*(1+p)}y| = |ua^{b+bp}wa^{c+cp}y| = |ua^bwa^cy| +
     |a^{bp}|+|a^{cp}| = p + bp + cp = p(1+b+c)$. 
     Podľa predpokladu má platiť, že $uv^{i+p}wx^{i+p}y \in L$, avšak dĺžka tohoto reťazca je
     $p(1+b+c)$, čo je súčin prirodzených čísiel, teda nie je prvočíslom, teda $uv^{i+p}wx^{i+p}y \notin L$, čo je spor
     predpokladu. 
-    Jazyk ${a^p | p je prvočíslo}$ nie je bezkontextovy.
+    Jazyk $\{a^p |$ p je prvočíslo $\}$ nie je bezkontextovy.
 \end{proof}
 
 
 
 \section*{Úloha č.3}
-Redukcia
+Najprv formálne definujme jazyky MP a jazyk Affine, medzi ktorými budeme definovať redukciu
+$\sigma$. 
 \begin{enumerate}
-    \item MP problém $\{<M>\#<w> |$ TS M zastaví na reťazci s kódom w$\}$
-    \item Affine problém $\{<M>| $jazyk TS M obsahuje aspoň 1 reťazec z jazyka Affine$\}$
+    \item MP = \{<M>\#<w> | TS M s kódom <M> zastaví na reťazci s kódom <w>\} $\cup \{0,1,\#\}^*$ 
+    \item TuringAffine = \{<M>| jazyk TS s kódom <M> obsahuje aspoň 1 reťazec z jazyka Affine\} $\cup \{0,1\}^*$ 
 \end{enumerate}
-Idea sigmy
+Nerozhodnuteľnosť problému \textit{TuringAffine} dokážeme zavedením redukcie z \textit{MP} na
+\textit{TuringAffine}.
+
+\subsection*{Idea redukcie}
+Pre kód <M>\#<w> inštancie MP problému TS $M\sigma$ vygeneruje na výstupnú pásku TS Mx s kódom <Mx> taký, že:
 \begin{enumerate}
-    \item Pre danú inštanciu MP problému Sigma vygeneruje kód TS taký, že:
-    \item TS vymaže svoju vstupnú pásku
-    \item TS skontroluje zda pôvodný TS <M> je well-formed (nie je garbage), ak nie je well-formed,
-        odmietne.
-    \item TS skopíruje kód reťazca <w> na svoju pásku
-    \item TS pomocou UTS simuluje <M> na kóde <w>
-    \item Ak UTS cyklí, potom jazyk TS je prázdny, teda neobsahuje reťazec z Affine (a
+    \item TS Mx vymaže svoju vstupnú pásku a skopíruje kód <M>\#<w>, ktorý má uložený v stavovom
+        riadení na svoju pásku
+    \item TS Mx skontroluje či kód <M> je korektný kód TS. To je možné, nakoľko jazyk kódovania TS
+        je regularným jazykom. V prípade, že kód <M> nie je validným kódom TS, TS Mx odmietne. 
+    \item TS Mx pomocou UTS simuluje <M> na kóde <w>
+    \item Ak UTS cyklí, potom jazyk TS Mx je prázdny, teda neobsahuje reťazec z Affine (a
         <M>\#<w> nepatrí do MP.)
-    \item Ak zastaví, tak TS prijime.
+    \item Ak UTS zastaví a TS s kódom <M> prijal reťazec s kódom <w>, tak TS Mx prijime, inak odmietne.
 \end{enumerate}
+
+\subsection*{Realizácia redukcie}
+\begin{itemize}
+    \item Kód univerzálneho TS $M_{UTS}$, ktorý na svojej páske v tvare $\Delta <M>\#<w> \Delta$ simuluje
+        prijatie reťazca s kódom $<w>$ TS s kódom $<M>$, je konštantný literál, ktorý je nezávislý
+        na obsahu vstupnej pásky a je možné vytvoriť úplný TS, ktorý kód univerzálneho TS na pásku. 
+    \item Kód TS $M_{valid}$, ktorý overuje, či kód TS <M> na páske je validne sformovaný, teda či <M> patrí do jazyka
+        korektne zakódovaných TS, je literál TS simulujúceho beh konečného automatu. Tento kód je
+        konštantný.
+    \item Kód TS $M_{erase}$, ktorý vymaže svoju pásku, je konštantný literál. 
+    \item Pre každý reťazec $<M>\#<w>$ sme schopný vytvoriť kód TS $M_{copy}$, ktorý po spustení vypíše na svoju
+        pásku reťazec $<M>\#<w>$. 
+    \item Nakoľko $M_{UTS}$, $M_{valid}$ i $M_{erase}$ sú konštantne dané TS, sme v stave vytvoriť
+        kód TS $M_{merged}$, ktorý bude obsahovať tieto TS a pomocnú stavovú logiku, ktorá prijme ak $M_{UTS}$
+        skončí.
+    \item Nakoniec, sme v stave vytvoriť taký úplný TS $M\Sigma$, ktorý pred svoj vstup $<M>\#<w>$ vypíše na
+        výstup kód TS <Mx>, ktorý bude obsahovať spojený TS $M_{merged}$, TS $M_copy$ a pomocné
+        prechody medzi týmito TS.
+    
+    \item Redukcia je potom funkcia $\sigma: \{0,1,\#\}^* \to \{0,1\}^*$, ktorá je realizovaná úplnym
+    TS $M\sigma$.
+\end{itemize}
+
+\subsection*{Korektnosť redukcie $\sigma$}
 Skúmajme jazyk L(Mx):
 \begin{enumerate}
-    \item $L(Mx) = \emptyset \iff$ <M> nie je well-formed alebo TS <M> na slove <w> nezastaví
-    \item $L(Mx) = \Sigma^* \iff$ <M> je well-formed a <M> zastaví na <w>
+    \item $L(Mx) = \emptyset \iff$ <M> nie je korektný kód TS alebo TS <M> na slove <w> cyklí 
+    \item $L(Mx) = \Sigma^* \iff$ <M> je správne sformulovaný kód TS a TS s kódom <M> prijíma kód <w>
 \end{enumerate}
-Ekvivalencia
+
+Dokážeme, že redukcia je korektná.
 \begin{enumerate}
-    \item TS M prijme <w> $\iff$ TS M je správne sformovaný a TS <M> na slove <w> zastaví $\iff L(Mx) =
-        \Sigma^* \iff$ TS <M> taký, že jazyk L(M) obsahuje aspoň jeden reťazec z jazyka Affine
+    \item <M>\#<w> $\in MP \iff$ TS M je správne sformovaný a TS <M> príjme <w> $\iff L(Mx) =
+        \Sigma^* \iff$ TS <Mx> taký, že jazyk L(Mx) obsahuje aspoň jeden reťazec z jazyka Affine
+        $\iff$ <Mx> $\in$ TurringAffine
 \end{enumerate}
+
+Nakoniec je nutné ukázať, že pre každú kombináciu konštant $a_0$ a $a_1$ je jazyk Affine vždy
+neprázdny, teda je možné nájsť aspoň jeden reťazec jazyka Affine. Ak by bol jazyk Affine prázdny,
+potom by nebolo možné redukciou vyjadriť oba prípady rozhodovacieho problému MP a redukcia by teda
+neexistovala. 
+
+Avšak, pre ľubovoľné konštantny $a_0$ a $a_1$ vždy existuje reťazec, ktorý patrí do daného jazyka Affine.
+Napríklad pre $w = 0^{a_1}$ vždy $w
+\in Affine$, pretože platí $a_0 \times a_1 + a_1 \times 0 - a_1\times a_0 = 0$.
+
+Dokázali sme teda, že existuje redukcia z MP, ktorý je nerozhodnuteľný, na problém TuringAffine.
+TuringAffine je teda nutne nerozhodnuteľný.
+\subsection*{Idea čiastočnej rozhodnuteľnosti}
+TODO
+
 \section*{Úloha č.4}
 \subsection*{A - TS na RationalC}
 Prevod TS na RationalC sa skladá z nasledujúcich částí
@@ -167,6 +226,12 @@ Prevod TS na RationalC sa skladá z nasledujúcich částí
         $0.734375$. Vďaka tomuto zakódovaniu obsahuje racionálne číslo nekonečno znakov
         reprezentujúcich $\Delta$ z prava aj z ľava pôvodonej pásky $w$, pretože dvojica 00 pridaná
         pred aj na koniec binárnej reprezentácie čísla nemení jeho význam.
+        Pretože počiatočná hodnota registra $x$ musí byť podľa definície číslo z $\mathbb{N}$, 
+        je hodnota $x0$ zvolená ako dekadická hodnota binarneho kódovania $w$ s racionálnou čiarkou
+        na za reťazcom $w$ a pre začatím vykonávania programu simulujúceho TS prevedie program
+        $n$ delení, čím efektívne posunie desatinnú čiarku na správne miesto, za prvý symbol abecedy
+        TS. Číslo $n$ je zjavne dĺžka reťazca binárneho kódu mínus 2.
+
     \item Prevod jednotlivých pravidiel TS na príkazy jazyka RacionalC
         Jednotlivé stavy TS sú v RationalC reprezentované sekvenciou príkazov. 
         Keďže jednotlivé symboly TS sú v RationalC reprezentované dvojicami bitov racionálneho čísla, potom posun hlavy je
@@ -235,7 +300,7 @@ Príkazy $x *= 2 / x /= 2$ sú prechody z aktuálneho stavu do stavu a posunutí
 príkazy even() či odd() zas zápisom symbolu pod hlavou na páske TS.
 Príkaz return 1; predstavuje prechod pod ľubovoľným symbolom $\Sigma$ do koncového stavu TS,
 príkaz return 0 zas spustenie podprogramu, ktorý bude nekonečne cykliť do prava.
-Pre všetky stavy je pod symbolom \Delta pridaný podprogram, ktorý skočí na prvý \Delta na pravo od
+Pre všetky stavy je pod symbolom $\Delta$ pridaný podprogram, ktorý skočí na prvý $\Delta$ na pravo od
 hlavy, vyvolá shift right, skočí na prvý delta na ľavo a zapíše do neho symbol 0.
 Týmto spôsobom je ošetrená situácia, kedy sa racionálne číslo delením rozšíruje smerom do ľava
 (nulami), čo by spôsobilo prepadnutie hlavy v TS. 
