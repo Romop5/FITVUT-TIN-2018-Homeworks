@@ -285,97 +285,124 @@ TS previesť na TS s $\Gamma = \Sigma \cup {\Delta}$ pomocou zakódovania symbol
 ako postupností symbolov z $\Gamma$ (opora, str. TODO).
 
 Prevod TS na RationalC sa skladá z nasledujúcich částí
-\subsection*{Prevod vstupnej pásky TS na číslo $x_0$}
+\subsubsection*{Prevod vstupnej pásky TS na číslo $x_0$}
     Vstupná páska TS má tvar $\Delta w \Delta$, kde $w \in \Sigma$. Keďže vieme, že program
     $RacionalC$ má na vstupe celé číslo $x_0$ a naopak TS začína na pozícii $\Delta$, musíme
     pred prevodom reťazec $\Delta w \Delta$ reverzovať. 
-    Následne je páska $\delta w^R \delta$ obsahujúca znaky $0,1,\Delta$ je prevedená nasledujúco:
-    \begin{enumerate}
-        \item 0 je vyjadrená ako 10
-        \item 1 je vyjadrená ako 11
-        \item $\Delta$ je vyjadrená ako 00
-        \item $\!$ je vyjadrená ako 11
-    \end{enumerate}
-    Kódovanie sme rozšírili o špeciálny symbol $\!$, ktorý nie je súčasťou páskovej abecedy.
+    Následne je páska $\Delta w^R \Delta$ obsahujúca znaky $0,1,\Delta$ je prevedená nasledujúco:
+    \begin{align*}
+        &\Delta \implies 00 &  & \#  \implies 11 &
+        &0 \implies 10 &  &1 \implies 11 
+    \end{align*}
+    Kódovanie sme rozšírili o špeciálny symbol $\#$, ktorý nie je súčasťou páskovej abecedy.
     Tento špeciálny symbol je nutný pre korektné dekovanie stavu, kedy TS prepadla hlava.
 
     Po prevedení symbolov w na takéto binárne kódovanie je výsledný reťazec interpretovaný ako
-    binárne zakódované prirodzené číslo rozšírené o kód symbolu $!$.
+    binárne zakódované prirodzené číslo rozšírené o kód symbolu $\#$.
 
     Príklad w: $\Delta011\Delta$ sa po reverzácii na $\Delta110\Delta$ zobrazí na $00 11 10 10 00
     11$, teda na prirodzené číslo $931$. Vďaka kódu $00$ pre $\Delta$ obsahuje racionálne číslo nekonečno znakov
     reprezentujúcich $\Delta$ z prava aj z ľava pôvodonej pásky $w$, pretože dvojica 00 pridaná
     pred aj na koniec binárnej reprezentácie čísla nemení jeho význam.
 
-    Nakoľko sme oproti reprezentácii pásky TS posunuli desatinnú čiarku pridaním oddelovača $!$, je
-    nutné na začiatku programu \textit{RacionalC} vykonať 2x príkaz $x \\= 2;$ aby sme posunuli čiarku na
+    Nakoľko sme oproti reprezentácii pásky TS posunuli desatinnú čiarku pridaním oddelovača $\#$, je
+    nutné na začiatku programu \textit{RacionalC} vykonať 2x príkaz $x \setminus = 2;$ aby sme posunuli čiarku na
     správne miesto.
 
-\begin{enumerate}
-    \item Prevod jednotlivých pravidiel TS na príkazy jazyka \textit{RacionalC}
-        Jednotlivé stavy TS sú v \textit{RationalC} reprezentované sekvenciou príkazov. 
-        Keďže jednotlivé symboly TS sú v RationalC reprezentované dvojicami bitov racionálneho čísla, potom posun hlavy je
-        realizovaný 2x násobením alebo 2x delením, čo má za následok posun desatinnej čiarky o
-        dvojicu bitov.
-        Pre každý prechod $p$ TS zo stavu q je vygenerovaný príkaz nasledujúco:
-\end{enumerate}
-        \begin{verbatim}
-        q: x /= 2   
-        q+1 if x \% 2 == 0 goto q-6 
-        q+2 x *= 2
-        q+3 if x \% 2 == 0 goto q-0 
-        q+4 if x \% 2 == 1 goto q-1 
-        q+5 return B;
-        q+6 x *= 2
-        q+7 if x \% 2 == 0 goto q-delta
-        q+8 if x \% 2 == 1 goto q-delta
-        \end{verbatim}
-        Hodnota $B$ riadku $q+5$ je 0 pre nekoncový stav a $1$ pre $q_f$.
-        V prípade, že stav $q$ neobsahuje prechod pre daný symbol z $\Gamma$, je daný riadok
-        nahradený prázdnym riadkom (pre $\Delta$ riadok $q+1$, pre $0$ $q+3$, pre $1$ $q+4$.
+\subsubsection*{Prevod jednotlivých pravidiel TS na príkazy jazyka \textit{RacionalC}}
+    Jednotlivé stavy TS sú v \textit{RationalC} reprezentované sekvenciou príkazov. 
+    Keďže jednotlivé symboly TS sú v RationalC reprezentované dvojicami bitov racionálneho čísla, potom posun hlavy je
+    realizovaný 2x násobením alebo 2x delením, čo má za následok posun desatinnej čiarky o
+    dvojicu bitov.
 
-        Povšimnime si, že ak stav nie je koncový a zároveň neobsahuje v TS žiaden prechod, RationalC
-        skončí program s návratovou hodnotou 0, čo je ekvivalentné abnormálnemu zastaveniu TS na
-        nedefinovanom prechode.
+    Realizácia koncového stavu je nasledujúca:
+    \begin{verbatim}
+    q_f: return 1;
+    \end{verbatim}
 
-        Symboly $q-delta, q-0, q-1$ tvaru $Q-\Gamma$ predsavujú symbolický vyjadrenie čísla riadku, ktorý
-        reprezentuje sekvenciu príkazov vykonávajúci konkrétny prechod.
-        Napríklad prechodu $\delta(q, 0) = (p, L)$ zodpovedá sekvencia na adrese $q-0$:
-        \begin{verbatim}
-        q-0: x /=2
-        x /=2
-        if \% 2 == 0 goto p
-        if \% 2 == 1 goto p
-        \end{verbatim}
-        Pre prechod R získame sekvenciu analogicky, nahradením x /=2 za x *=2.
-        Pri zápise symbolu z abecedy $\Gamma$ nahradíme dvojicu násobení / delení nasledujúcou
-        sekvenciou:
-        \begin{enumerate}
-            \item Zápis $\Delta$ ako 00: x = even(x); x /= 2; x = even(x); x */ 2;
-            \item Zápis $0$ ako 10: x = even(x); x /= 2; x = odd(x); x */ 2;
-            \item Zápis $0$ ako 11: x = odd(x); x /= 2; x = odd(x); x */ 2;
-        \end{enumerate}
-        Príkazy $odd()$ a $even()$ pracujú s bitom racionálneho čísla pred desatinnou čiarkou, teda
-        umožňujú simulovať zápis znaku na dvojici bitov, ktorá je pred desatinnou čiarkou, teda
-        odpovedá pôvodnemu symbolu pod hlavou v TS.
+    Realizáciu nejakého nekoncového stavu $q$ z TS je možné vyjadriť nasledujúcim pseudo kódom:
+    \begin{verbatim}
+    q: 
+    q_0:   Over či symbol je rovný 0. Ak nie skáč na q_1
+    q_0+1: Vykonaj prechod definovaný pre d(q,0). 
+    q_1:   Over či symbol je rovný 1. Ak nie skáč na q_D
+    q_1+1: Vykonaj prechod definovaný pre d(q,1). 
+    q_D:   Over či symbol je rovný Delta. Ak nie skáč na q_#
+    q_D+1: Vykonaj prechod definovaný pre d(q,Delta). 
+    q_#:   return 0 // pre # doslo k prepadnutiu hlavy
+    \end{verbatim}
 
-        Ošetrenie prepadnutia hlavy:
-        Racionálne číslo obsahuje špeciálnu dvojicu bitov 01 na začiatku reťazca (na najvyžšich
-        pozíciach). Na začiatku sekvencie zodpovedajúcej vykonániu stavu $q \in Q$ pribudne
-        sekvencia, ktorá skontroluje, či sa aktuálna dvojica bitov pred desatinnou čiarkou nerovná
-        špeciálnemu symbolu reprezentujúcemu prepadnutie hlavy. Ak áno, potom program končí hodnotou
-        0. Inak pokračuje vykonávanie stavu.
+    Poznámka: ak pre daný stav nie je prechod pre daný symbol definovaný, potom je sekvencia
+    "vykonaj prechod" nahradená jediným príkazom $return 0;$, ktorý odpovedá zastaveniu TS na
+    nedefinovanom prechode.
+
+    Symboly $q, q\_0$ a pod. označujú symbolicky číslo riadku, na ktorom začína daná sekvencia. 
+    Realizáciu jednotlivých overení pre každý zakódovaný symbol $S$ z $\Gamma$ môžeme vyjadriť
+    nasledujúcou sekvenciou príkazov, kde $X$ a $Y$ je kód symbolu z prekódovania vyššie (napr. $0 =
+    10 \implies X = 1 \land Y = 0$).
+    \begin{verbatim}
+    // OVERENIE pre symbol S 
+    q_S:   if x \% 2 == Y goto q_S+3    // zaciname na bite Y
+    q_S+1: GOTO(q_next)                 // ak Y nesedi, skusime iny symbol 
+    q_S+3: x /= 2                       // posun na bit X
+    q_S+4: if x \% 2 == Y goto q_S+7 
+    q_S+5: x *= 2       // ak nesedi ani X, vratime hlavu na Y
+    q_S+6: GOTO(q_next) // nepodmienecny skok na overenie ďalšieho symbolu
+    q_S+7: x *= 2       // ďalej následuje vykonanie prechodu pre symbol S
+    \end{verbatim}
+    Poznámka: Symbol \textbf{q\_next} je nasledujúci symbol páskovej abecedy z $\Gamma$. Pre
+    $\Delta$ je to nakoniec $\#$.  
+    Poznámka: Makro \textbf{GOTO(state)} sa expanduje na sekvenciu príkazov \texttt{if x \% 2 == 0 goto
+    state; if x \% 2 == 0 goto state} 
+
+    Sekvencia príkazov odpovedajúca vykonaniu prechodu je potom závislá na konkrétnom type prechodu.
+    
+    Pre \textbf{zápis symbolu} $x \in \Gamma$, ktorého kód je rovný $XY$ a prechod do stavu $p$ ide o
+    nasledujúcu sekvenciu:
+    \begin{verbatim}
+    q_S_X:   WRITE(Y)
+    q_S_X+1: x /= 2
+    q_S_X+2: WRITE(X)
+    q_S_X+3: x *= 2
+    q_S+6:   GOTO(q_next)
+    \end{verbatim}
+    Poznámka: Makro \textbf{WRITE(Z)} sa expanduje pre $Z = 0$ na $x = even(x)$, pre $Z = 1$ na $x = odd(x)$ 
+
+    \textbf{Posun hlavy} na páske smerom $Z = {L,R}$ a prechod na stav $s$:
+    \begin{verbatim}
+    q_S_X: SHIFT(Z) 
+    q_S_X: SHIFT(Z)  
+    q_S+6: GOTO(S) // skok na stav S
+    \end{verbatim}
+    Poznámka: Makro \textbf{SHIFT(Z)} sa expanduje pre $Z = R$ na $x \div = 2$, pre $Z = L$ na $x *= 2)$ 
+    Poznámka: Invertovanie posunu na páske TS voči posunu desatinnej čiarky vzniklo reverzovaním reťazca $w$.
+
+    Na začiatku program prevedie shift o 2 pozície do ľava, aby umiestnil destinnú čiarku pred
+    symbol $\#$. Následne následuje vykonávanie sekvencie reprezentujúcej počiatočny stav TS.
+
+    Týmto spôsobom sme teda ukázali, že každý stav z TS a jeho prechody sme schopný zakódovať
+    ekvivalentne v príkazoch \textit{RationalC}. 
+    Zároveň program v \textit{RationalC} korektne detekuje prepadnutie hlavy, zastavenie na
+    nedefinovanom prechode pre daný stav (return 0) a konečne prijatie v stave $q_f$.
 
 
 \subsection*{B - RationalC na TS}
-Racionálne číslo $x_0$ môžeme reprezentovať ako binárne kódovaný číslo. Na počiatku má teda páska
-tvar $\Delta w \Delta$, kde w je binárne zakódované racionálne číslo a zároveň obsahuje TS sekvenciu
-prechodov do prava, ktoré posunú hlavu na tú pozíciu, ktorá v pôvodnom racionálnom čísle
+TODO
+
+Prirodzené číslo $x_0$ môžeme reprezentovať ako binárne kódovaný číslo. Na počiatku má teda páska
+tvar $\Delta w^R \Delta$, kde $w$ je binárne zakódované prirodzené číslo $x_0$ a zároveň obsahuje TS sekvenciu
+prechod do prava, ktoré posunú hlavu na tú pozíciu, ktorá v pôvodnom racionálnom čísle
 predstavovala desatinnú čiarku. Desatinná čiarka simulovaného registra $x_0$ sa v TS nachádza vždy
 za pozíciou hlavy.
-Prechod TS s posunutím hlavy doprava realizuje príkaz $x *= 2$, doľava zas $x /= 2$. Príkaz odd /
+
+Z počiatočného stavu preto vykoná TS prechod s posunutím hlavy doprava realizuje príkaz $x *= 2$, doľava zas $x /= 2$. Príkaz odd /
 even sú realizované ako zápis symbolu 1 / 0 pod hlavou.
-Každý riadok s príkazom programu RationalC je realizovaný ako jeden unikátny stav v TS.
+\subsubsection*{Prevod programu na stavy}
+
+Každý riadok s príkazom programu \textit{RationalC} je realizovaný ako jeden unikátny stav v TS.
+Implicitne, po vykonaní každého príkazu (okrem if) následuje zmena stavu na stav, reprezentovaný
+nasledujúcim riadkom v programe. 
+
 Príkazy $x *= 2 / x /= 2$ sú prechody z aktuálneho stavu do stavu a posunutím hlavy,
 príkazy even() či odd() zas zápisom symbolu pod hlavou na páske TS.
 Príkaz return 1; predstavuje prechod pod ľubovoľným symbolom $\Sigma$ do koncového stavu TS,
