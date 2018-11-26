@@ -206,38 +206,118 @@ Napríklad pre $w = 0^{a_1}$ vždy $w
 Dokázali sme teda, že existuje redukcia z MP, ktorý je nerozhodnuteľný, na problém TuringAffine.
 TuringAffine je teda nutne nerozhodnuteľný.
 \subsection*{Idea čiastočnej rozhodnuteľnosti}
-TODO
+Čiastočnú rozhodnuteľnosť je možné dokázať redukciou problému TuringAffine na iný rozhodovací
+problém, ktorý je práve čiastočne rozhodnuteľný, napr. problém neprázdnosti jazyka TS (problém NEP). 
+Problém NEP je čiastočne vyčísliteľný podľa tvrdenia zo skript, str. 129. 
+
+Potom totiž platí vzťah $TurringAffine \leq NEP$ a podla vety $6.3.1$ (skripta, str. 128) platí, že
+ak NEP je rekurzívne vyčísliteľný, potom aj TurringAffine je rekurzívne vyčísliteľný, teda čiastočne
+rozhodnuteľný. 
+
+Následne si ukážeme, akým spôsobom by bola prevedená redukcia $\sigma$.
+Formálne sú rozhodovacie problémy nasledujúce:
+\begin{enumerate}
+    \item TuringAffine = \{<M>| jazyk TS s kódom <M> obsahuje aspoň 1 reťazec z jazyka Affine\} $\cup \{0,1\}^*$ 
+    \item NEP = \{<M>| jazyk TS s kódom <M> obsahuje aspoň 1 (je neprázdny)\} $\cup \{0,1\}^*$ 
+\end{enumerate}
+
+Redukcia $\sigma: {0,1}^* \to {0,1}^*$, ktorá každej inštancii z jazyka TuringAffine priradí
+inštanciu jazyka NEP, by bola realizovaná nasledujúco:
+Úplný TS realizujúci redukciu $\sigma$ pre daný vstup má na svojom výstupe TS s kódom <Mx>, ktorý
+realizuje nasledujúcu činnosť:
+\begin{enumerate}
+    \item TS Mx overí, či reťazec w na jeho vstupe patrí do jazyka Affine. Príslušnosť reťazca do
+        jazyka Affine je realizovateľná pomocou TS - stačí spočítať počet symbolov 0 a 1 v reťazci
+        w, previesť príslušné násobenie a odčítanie a porovnať výsledok voči nule. Konštanty
+        a0 a a1 môže mať daný TS zakódované vo svojom stavovom riadení.
+    \item Ak reťazec w nepatrí do jazyka Affine, potom TS Mx odmietne.
+    \item Inak TS Mx posunie reťazec w, ktorý má zapísaný na páske, a skopíruje kód
+        TS M <M>, čím na páske vznikne <M>\#w
+    \item TS Mx overí, či TS s kódom <M> je korektne sformovaný TS. Ak nie odmietne.
+    \item Napokon, TS Mx s pomocou UTS simuluje prijatie reťazca w TS s kódom <M>. Ak TS s kódom <M>
+        odmietne reťazec w alebo cyklí, potom TS Mx odmietne, inak prijme.
+\end{enumerate}
+Skúmajme jazyk TS Mx:
+\begin{enumerate}
+    \item $L(Mx) = \emptyset \iff$ TS <M> nie je správne sformovaný alebo TS <M> je správne
+        sformovaný, ale L(M) neobsahuje ani jeden reťazec z jazyka Affine.
+    \item $L(Mx) \neq \emptyset \iff$ TS <M> je správne sformovaný a L(M) obsahuje aspoň jeden reťazec
+        z jazyka Affine
+\end{enumerate}
+
+Zjavne platí, že TS <M> obsahuje reťazec z jazyka Affine $\iff$ TS <M> je správne sformovaný a L(M)
+obsahuje aspoň jeden reťazec z jazyka Affine $\iff L(Mx) \neq \emptyset \iff$ TS s kódom <Mx> a
+jazyk L(Mx) je neprázdny.
 
 \section*{Úloha č.4}
-\subsection*{A - TS na RationalC}
-Prevod TS na RationalC sa skladá z nasledujúcich částí
-\begin{enumerate}
-    \item Prevod pásky $w$ na $x_0$\\
-        Páska $w$ obsahujúca znaky $0,1,\Delta$ je prevedená nasledujúco:
-        \begin{enumerate}
-            \item 0 je vyjadrená ako 10
-            \item 1 je vyjadrená ako 11
-            \item $\Delta$ je vyjadrená ako 00
-        \end{enumerate}
-        Po prevedení symbolov w na takéto binárne kódovanie je výsledný reťazec interpretovaný ako
-        binárne zakódované racionálne číslo, ktorého desatinná čiarka je za prvými dvoma binárnymi
-        číslami (za prvou dvojicou).
-        Príklad w: $\Delta011\Delta$ sa zobrazí na $00. 10 11 11 00$, teda na racionálne číslo
-        $0.734375$. Vďaka tomuto zakódovaniu obsahuje racionálne číslo nekonečno znakov
-        reprezentujúcich $\Delta$ z prava aj z ľava pôvodonej pásky $w$, pretože dvojica 00 pridaná
-        pred aj na koniec binárnej reprezentácie čísla nemení jeho význam.
-        Pretože počiatočná hodnota registra $x$ musí byť podľa definície číslo z $\mathbb{N}$, 
-        je hodnota $x0$ zvolená ako dekadická hodnota binarneho kódovania $w$ s racionálnou čiarkou
-        na za reťazcom $w$ a pre začatím vykonávania programu simulujúceho TS prevedie program
-        $n$ delení, čím efektívne posunie desatinnú čiarku na správne miesto, za prvý symbol abecedy
-        TS. Číslo $n$ je zjavne dĺžka reťazca binárneho kódu mínus 2.
+Turingovú úplnosť programu \textit{RacionalC} dokážeme konštruktívne. Ukážeme, že každý TS je možné
+zakódovať ako ekvivalentný program \textit{RacionalC}, a naopak, že každý program \textit{RacionalC}
+je možné vytvoriť ekvivalentný TS.
 
-    \item Prevod jednotlivých pravidiel TS na príkazy jazyka RacionalC
-        Jednotlivé stavy TS sú v RationalC reprezentované sekvenciou príkazov. 
+Pred popisom jednotlivých prevodov je nutné uvedomiť si, akým spôsobom sú si TS a
+\textit{RacionalC} podobné. \textit{RacionalC} pracuje s racionálnym číslom, pričom umožňuje toto číslo deliť a násobiť 2,
+prípadne nastavovať jeho párnosť, či nepárnosť, a rovnako disponuje príkazmi pre zmenu toku programu
+podľa párnosti. 
+Efekt týchto operácii môžeme skúmať na binárnom kóde racionálneho čísla v registri x.
+Zjavne platí, že operácie deleno / násobenie 2 posúvajú desatinnú čiarku v binárnej reprezentácii
+čísla. Podobne operácia even / odd v skutočnosti len mení hodnotu bitu čísla x, ktorý leží tesne
+pred desatinnou čiarkou. Nakoniec, príkaz if modulo v skutočnosti zisťuje aktuálnu hodnotu bitu
+pred desatinnou čiarkou a podľa toho skáče v programe.
+
+Ekvivalentné operácie ku spomenutým operáciam môžeme vidieť aj v TS. Uvažujme pásku automatu len nad
+symbolmi 0 a 1. Potom pozíciu čítacej hlavy na páske
+môžeme vnímať ako pozíciu desatinnej čiarky v čísle s kódom odpovedajúcemu páske.
+Operácie násobenie a delenie je možné realizovať v TS ako posun čítajúcej hlavy.
+Podobne, zápis symbolu pod čtecí hlavou je možné sémanticky vnímať ako operácie odd/even.
+Nakoniec, samotné prechody TS realizujú podmienené vykonávanie v závislosti na hodnote symbolu pod
+čtecí hlavou na páske.
+
+Jednotlivé operácie je teda možné zakódovať ekvivalentne v TS aj v programe \textit{RacionalC}.
+
+V následujúcej časti predstavený príkladný spôsob zakódovania spolu s ošetrením špeciálneho
+chovania, akým je prepadnutie hlavy TS, či nekonečné rozširovanie reprezentácie racionálneho čísla
+do oboch smerov v programe \textit{RacionalC}.
+
+\subsection*{A - Prevod TS na RationalC}
+Podľa zadania prevádzame deterministický TS s abecedou $\Sigma = {0,1}$ a páskovou abecedou 
+$\Gamma = \Sigma \cup {\Delta}$. V prípade, že by pásková abeceda obsahovala ďalšie znaky, je možné 
+TS previesť na TS s $\Gamma = \Sigma \cup {\Delta}$ pomocou zakódovania symbolov rozšírenej páskovej abecedy
+ako postupností symbolov z $\Gamma$ (opora, str. TODO).
+
+Prevod TS na RationalC sa skladá z nasledujúcich částí
+\subsection*{Prevod vstupnej pásky TS na číslo $x_0$}
+    Vstupná páska TS má tvar $\Delta w \Delta$, kde $w \in \Sigma$. Keďže vieme, že program
+    $RacionalC$ má na vstupe celé číslo $x_0$ a naopak TS začína na pozícii $\Delta$, musíme
+    pred prevodom reťazec $\Delta w \Delta$ reverzovať. 
+    Následne je páska $\delta w^R \delta$ obsahujúca znaky $0,1,\Delta$ je prevedená nasledujúco:
+    \begin{enumerate}
+        \item 0 je vyjadrená ako 10
+        \item 1 je vyjadrená ako 11
+        \item $\Delta$ je vyjadrená ako 00
+        \item $\!$ je vyjadrená ako 11
+    \end{enumerate}
+    Kódovanie sme rozšírili o špeciálny symbol $\!$, ktorý nie je súčasťou páskovej abecedy.
+    Tento špeciálny symbol je nutný pre korektné dekovanie stavu, kedy TS prepadla hlava.
+
+    Po prevedení symbolov w na takéto binárne kódovanie je výsledný reťazec interpretovaný ako
+    binárne zakódované prirodzené číslo rozšírené o kód symbolu $!$.
+
+    Príklad w: $\Delta011\Delta$ sa po reverzácii na $\Delta110\Delta$ zobrazí na $00 11 10 10 00
+    11$, teda na prirodzené číslo $931$. Vďaka kódu $00$ pre $\Delta$ obsahuje racionálne číslo nekonečno znakov
+    reprezentujúcich $\Delta$ z prava aj z ľava pôvodonej pásky $w$, pretože dvojica 00 pridaná
+    pred aj na koniec binárnej reprezentácie čísla nemení jeho význam.
+
+    Nakoľko sme oproti reprezentácii pásky TS posunuli desatinnú čiarku pridaním oddelovača $!$, je
+    nutné na začiatku programu \textit{RacionalC} vykonať 2x príkaz $x \\= 2;$ aby sme posunuli čiarku na
+    správne miesto.
+
+\begin{enumerate}
+    \item Prevod jednotlivých pravidiel TS na príkazy jazyka \textit{RacionalC}
+        Jednotlivé stavy TS sú v \textit{RationalC} reprezentované sekvenciou príkazov. 
         Keďže jednotlivé symboly TS sú v RationalC reprezentované dvojicami bitov racionálneho čísla, potom posun hlavy je
         realizovaný 2x násobením alebo 2x delením, čo má za následok posun desatinnej čiarky o
         dvojicu bitov.
-        Pre každý prechod p TS zo stavu q je vygenerovaný príkaz nasledujúco:
+        Pre každý prechod $p$ TS zo stavu q je vygenerovaný príkaz nasledujúco:
 \end{enumerate}
         \begin{verbatim}
         q: x /= 2   
