@@ -394,14 +394,42 @@ tvar $\Delta w^R \Delta$, kde $w$ je binárne zakódované prirodzené číslo $
 prechod do prava, ktoré posunú hlavu na tú pozíciu, ktorá v pôvodnom racionálnom čísle
 predstavovala desatinnú čiarku. Desatinná čiarka simulovaného registra $x_0$ sa v TS nachádza vždy
 za pozíciou hlavy.
+Podobne ako pri prevode na program, aj tu je nutno užiť reverzáciu reťazca z dôvodu, že program má
+pri štarte desatinnú čiarku na konci reťazca, kdežto TS na začiatku pásky.
+
+\textbf{Príklad:}
+Prirodzené číslo 29 má binárne zakódovanie 11101. Jeho reverzáciou získavame 10111 a dokopy
+počiatočnu pásku $\Delta 11101 \Delta$. 
+Zároveň pridáme do TS jeden extra počiatnočný stav, ktorý posunie hlavu do prava a prejde na
+počiatočný stav programu.
+
+\subsubsection*{Prevod programu na stavy}
+Pred tým, než zadefinujeme prevod na TS, je nutné uvažovať na situáciami, ktoré musí TS korektne
+ošetriť. Pôvodný program totiž pracuje s neobmedzeným racionálnym číslom, teda s páskou, ktorá
+rastie do oboch strán. Naproti tomu, TS má pásku obmedzenú z ľava. Preto nutne bude TS pri posunutí
+hlavy do ľava kontrolovať, či po prechode nemá pod hlavou blank. Ak áno, potom aktivuje TS, ktorý
+skočí na ďalší blank do prava, vykoná shift do prava, skočí na blank v ľavo, zapíše 0 a pokračuje.
+
+Podobne, pri skoku do ľava je nutné prepísať prípadný blank, ktorý sa po prechode môže vyskytnúť pod
+hlavou na 0, zavedením pomocného stavu a dvojicou prechodou (posun hlavy a zápis 0).
+
+Samotný prevod príkazov vykonáme nasledovne. Každý riadok s príkazom programu \textit{RationalC} je realizovaný ako jeden unikátny stav v TS.
+Implicitne, po vykonaní každého príkazu (okrem if) následuje zmena stavu na stav, reprezentovaný
+nasledujúcim riadkom v programe. V TS preto po vykonaní prechodu,  
+
+Uvažujme nasledujúce ekvivalentné vyjadrenie:
+\begin{enumerate}
+    \item \textbf{return} 0 => abnormálne zastavenie TS (napr. pomocou prepadnutia hlavy)
+    \item \textbf{return} 1 => prechod do koncového stavu $q_F$
+    \item x = \textbf{odd}(x) => nepodminenený zápis 1 pod čtecí hlavou
+    \item x = \textbf{even}(x) => nepodminenený zápis 1 pod čtecí hlavou
+    \item x \textbf{*=} x => posun hlavy do ľava (reverzácia)
+    \item x \textbf{$\setminus$=} x => posun hlavy do prava (reverzácia)
+    \item if \textbf{x \%2} == b goto N => pre symbol B = {0,1} na páske preveď prechod do stavu na riadku N
+\end{enumerate}
 
 Z počiatočného stavu preto vykoná TS prechod s posunutím hlavy doprava realizuje príkaz $x *= 2$, doľava zas $x /= 2$. Príkaz odd /
 even sú realizované ako zápis symbolu 1 / 0 pod hlavou.
-\subsubsection*{Prevod programu na stavy}
-
-Každý riadok s príkazom programu \textit{RationalC} je realizovaný ako jeden unikátny stav v TS.
-Implicitne, po vykonaní každého príkazu (okrem if) následuje zmena stavu na stav, reprezentovaný
-nasledujúcim riadkom v programe. 
 
 Príkazy $x *= 2 / x /= 2$ sú prechody z aktuálneho stavu do stavu a posunutím hlavy,
 príkazy even() či odd() zas zápisom symbolu pod hlavou na páske TS.
