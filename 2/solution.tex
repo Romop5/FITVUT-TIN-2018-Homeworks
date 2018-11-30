@@ -139,8 +139,9 @@ Uvažujme iteráciu pumpovania $i = 1+p$.
 Najprv formálne definujme jazyky MP a jazyk Affine, medzi ktorými budeme definovať redukciu
 $\sigma$. 
 \begin{enumerate}
-    \item MP = \{<M>\#<w> | TS M s kódom <M> zastaví na reťazci s kódom <w>\} $\cup \{0,1,\#\}^*$ 
-    \item TuringAffine = \{<M>| jazyk TS s kódom <M> obsahuje aspoň 1 reťazec z jazyka Affine\} $\cup \{0,1\}^*$ 
+    \item MP = \{<M>\#<w> | TS M s kódom <M> zastaví na reťazci s kódom <w>\} $\subset \{0,1,\#\}^*$ 
+    \item TuringAffine = \{<M>| jazyk TS s kódom <M> obsahuje aspoň 1 reťazec z jazyka Affine\}
+        $\subset \{0,1\}^*$ 
 \end{enumerate}
 Nerozhodnuteľnosť problému \textit{TuringAffine} dokážeme zavedením redukcie z \textit{MP} na
 \textit{TuringAffine}.
@@ -217,8 +218,9 @@ rozhodnuteľný.
 Následne si ukážeme, akým spôsobom by bola prevedená redukcia $\sigma$.
 Formálne sú rozhodovacie problémy nasledujúce:
 \begin{enumerate}
-    \item TuringAffine = \{<M>| jazyk TS s kódom <M> obsahuje aspoň 1 reťazec z jazyka Affine\} $\cup \{0,1\}^*$ 
-    \item NEP = \{<M>| jazyk TS s kódom <M> obsahuje aspoň 1 (je neprázdny)\} $\cup \{0,1\}^*$ 
+    \item TuringAffine = \{<M>| jazyk TS s kódom <M> obsahuje aspoň 1 reťazec z jazyka Affine\}
+        $\subset \{0,1\}^*$ 
+    \item NEP = \{<M>| jazyk TS s kódom <M> obsahuje aspoň 1 (je neprázdny)\} $\subset \{0,1\}^*$ 
 \end{enumerate}
 
 Redukcia $\sigma: {0,1}^* \to {0,1}^*$, ktorá každej inštancii z jazyka TuringAffine priradí
@@ -291,23 +293,24 @@ Prevod TS na RationalC sa skladá z nasledujúcich částí
     pred prevodom reťazec $\Delta w \Delta$ reverzovať. 
     Následne je páska $\Delta w^R \Delta$ obsahujúca znaky $0,1,\Delta$ je prevedená nasledujúco:
     \begin{align*}
-        &\Delta \implies 00 &  & \#  \implies 11 &
+        &\Delta \implies 00 &  & \#  \implies 01 &
         &0 \implies 10 &  &1 \implies 11 
     \end{align*}
     Kódovanie sme rozšírili o špeciálny symbol $\#$, ktorý nie je súčasťou páskovej abecedy.
-    Tento špeciálny symbol je nutný pre korektné dekovanie stavu, kedy TS prepadla hlava.
+    Tento špeciálny symbol je nutný pre korektné detekovanie stavu, kedy TS prepadla hlava.
 
     Po prevedení symbolov w na takéto binárne kódovanie je výsledný reťazec interpretovaný ako
     binárne zakódované prirodzené číslo rozšírené o kód symbolu $\#$.
 
-    Príklad w: $\Delta011\Delta$ sa po reverzácii na $\Delta110\Delta$ zobrazí na $00 11 10 10 00
-    11$, teda na prirodzené číslo $931$. Vďaka kódu $00$ pre $\Delta$ obsahuje racionálne číslo nekonečno znakov
+    Príklad: $w = \Delta011\Delta$ sa po reverzácii na $\Delta110\Delta$ a pridaní zarážky,
+    reprezentujúcej prepad hlavy rovná reťazcu $\Delta110\Delta \#$, čo sa zakóduje na $00 11 10 10 00
+    01$, teda na prirodzené číslo $929$. Vďaka kódu $00$ pre $\Delta$ obsahuje racionálne číslo nekonečno znakov
     reprezentujúcich $\Delta$ z prava aj z ľava pôvodonej pásky $w$, pretože dvojica 00 pridaná
     pred aj na koniec binárnej reprezentácie čísla nemení jeho význam.
 
     Nakoľko sme oproti reprezentácii pásky TS posunuli desatinnú čiarku pridaním oddelovača $\#$, je
     nutné na začiatku programu \textit{RacionalC} vykonať 2x príkaz $x \setminus = 2;$ aby sme posunuli čiarku na
-    správne miesto.
+    správne miesto a program začal s desatinnou čiarkou pred symbolom $\#$, teda pred prefixom $01$.
 
 \subsubsection*{Prevod jednotlivých pravidiel TS na príkazy jazyka \textit{RacionalC}}
     Jednotlivé stavy TS sú v \textit{RationalC} reprezentované sekvenciou príkazov. 
@@ -351,9 +354,10 @@ Prevod TS na RationalC sa skladá z nasledujúcich částí
     q_S+7: x *= 2       // ďalej následuje vykonanie prechodu pre symbol S
     \end{verbatim}
     Poznámka: Symbol \textbf{q\_next} je nasledujúci symbol páskovej abecedy z $\Gamma$. Pre
-    $\Delta$ je to nakoniec $\#$.  
+    $\Delta$ je to nakoniec $\#$.
+
     Poznámka: Makro \textbf{GOTO(state)} sa expanduje na sekvenciu príkazov \texttt{if x \% 2 == 0 goto
-    state; if x \% 2 == 0 goto state} 
+    state; if x \% 2 == 1 goto state} 
 
     Sekvencia príkazov odpovedajúca vykonaniu prechodu je potom závislá na konkrétnom type prechodu.
     
@@ -372,7 +376,7 @@ Prevod TS na RationalC sa skladá z nasledujúcich částí
     \begin{verbatim}
     q_S_X: SHIFT(Z) 
     q_S_X: SHIFT(Z)  
-    q_S+6: GOTO(S) // skok na stav S
+    q_S+6: GOTO(q_next) 
     \end{verbatim}
     Poznámka: Makro \textbf{SHIFT(Z)} sa expanduje pre $Z = R$ na $x \div = 2$, pre $Z = L$ na $x *= 2)$ 
     Poznámka: Invertovanie posunu na páske TS voči posunu desatinnej čiarky vzniklo reverzovaním reťazca $w$.
@@ -384,7 +388,98 @@ Prevod TS na RationalC sa skladá z nasledujúcich částí
     ekvivalentne v príkazoch \textit{RationalC}. 
     Zároveň program v \textit{RationalC} korektne detekuje prepadnutie hlavy, zastavenie na
     nedefinovanom prechode pre daný stav (return 0) a konečne prijatie v stave $q_f$.
+    \subsubsection{Príklad prevodu TS na program}
 
+    Uvažujme TS $M = (Q, \Sigma, \Gamma, \delta, q_0, q_f)$, kde $Q = \{q_0, q_1,q_f\}$, $\Sigma =
+    \{0,1\}$, $\Gamma = \{0,1,\Delta\}$, a
+    $\delta$: $\delta(q0, \Delta) = (q_1, R)$ $\delta(q1, 1) = (q_f, R)$.
+    Tento TS prijíma len reťazce začínajúce znakom 1.
+    Podľa postupu vyžšie prevedieme tento TS nasledujúco:
+    \begin{enumerate}
+        \item Na začiatku vygenerujeme posunutie desatinnej čiarky
+        \item Pre každý stav $s$ vygenerujeme sekvenciu začínajúcu na riadku $s$, ktorá realizuje jeho prechody.
+        \item Pre koncový stav $q_f$ vygenerujeme $q_f: return 1$.
+    \end{enumerate}
+
+    Dostaneme nasledujúci kód:
+    \footnotesize \begin{verbatim}
+    0: SHIFT(R) // posun desatinnej ciarky
+    1: SHIFT(R) 
+    2: GOTO(q_0)    // skok na pociatocny stav
+    q_0:
+    q_0_0:   if x \% 2 == 0 goto q_0_0+3    // 0 = 10
+    q_0_0+1: GOTO(q_0_1)                  // ak Y nesedi, skusime iny symbol 
+    q_0_0+3: x /= 2                       // posun na bit X
+    q_0_0+4: if x \% 2 == 1 goto q_0_0+7 
+    q_0_0+5: x *= 2       // ak nesedi ani X, vratime hlavu na Y
+    q_0_0+6: GOTO(q_0_1) // nepodmienecny skok na overenie ďalšieho symbolu
+    q_0_0+7: x *= 2       // ďalej následuje vykonanie prechodu pre symbol S
+    q_0_0+8: return 0;    // 0 nie je definovana pre stav q_0
+
+    q_0_1:   if x \% 2 == 1 goto q_0_1+3    // 1 = 11
+    q_0_1+1: GOTO(q_0_D)                 // ak Y nesedi, skusime iny symbol 
+    q_0_1+3: x /= 2                       // posun na bit X
+    q_0_1+4: if x \% 2 == 1 goto q_0_1+7 
+    q_0_1+5: x *= 2       // ak nesedi ani X, vratime hlavu na Y
+    q_0_1+6: GOTO(q_0_D) // nepodmienecny skok na overenie ďalšieho symbolu
+    q_0_1+7: x *= 2       // ďalej následuje vykonanie prechodu pre symbol S
+    q_0_1:   return 0;    // 1 nie je definovana pre stav q_0
+
+    q_0_D:   if x \% 2 == 0 goto q_0_D+3    // Delta = 00
+    q_0_D+1: GOTO(q_0_#)                 // ak Y nesedi, skusime iny symbol 
+    q_0_D+3: x /= 2                       // posun na bit X
+    q_0_D+4: if x \% 2 == 0 goto q_0_D+7 
+    q_0_D+5: x *= 2       // ak nesedi ani X, vratime hlavu na Y
+    q_0_D+6: GOTO(q_0_#) // nepodmienecny skok na overenie ďalšieho symbolu
+    q_0_D+7: x *= 2       // ďalej následuje vykonanie prechodu pre symbol S
+    q_0_D+8:  SHIFT(R)    // podla d(q_0, delta) = (q_1, R) 
+    q_0_D+9:  SHIFT(R)  
+    q_0_D+10:  GOTO(q_1) 
+    q_0_#:   return 0;
+
+    q_1:
+    q_1_0:   if x \% 2 == 0 goto q_1_0+3    // 0 = 10
+    q_1_0+1: GOTO(q_1_1)                  // ak Y nesedi, skusime iny symbol 
+    q_1_0+3: x /= 2                       // posun na bit X
+    q_1_0+4: if x \% 2 == 1 goto q_1_0+7 
+    q_1_0+5: x *= 2       // ak nesedi ani X, vratime hlavu na Y
+    q_1_0+6: GOTO(q_1_1) // nepodmienecny skok na overenie ďalšieho symbolu
+    q_1_0+7: x *= 2       // ďalej následuje vykonanie prechodu pre symbol S
+    q_1_0+8: return 0;    // 0 nie je definovana pre stav q_1
+
+    q_1_1:   if x \% 2 == 1 goto q_1_1+3    // 1 = 11
+    q_1_1+1: GOTO(q_1_D)                 // ak Y nesedi, skusime iny symbol 
+    q_1_1+3: x /= 2                       // posun na bit X
+    q_1_1+4: if x \% 2 == 1 goto q_1_1+7 
+    q_1_1+5: x *= 2       // ak nesedi ani X, vratime hlavu na Y
+    q_1_1+6: GOTO(q_1_D) // nepodmienecny skok na overenie ďalšieho symbolu
+    q_1_1+7: x *= 2       // ďalej následuje vykonanie prechodu pre symbol S
+    q_1_1+8:  SHIFT(R)    // podla d(q_1, 1) = (q_f, R) 
+    q_1_1+9:  SHIFT(R)  
+    q_1_1+10:  GOTO(q_f)  // uspesny koniec
+ 
+    q_1_D:   if x \% 2 == 0 goto q_1_D+3    // Delta = 00
+    q_1_D+1: GOTO(q_1_#)                 // ak Y nesedi, skusime iny symbol 
+    q_1_D+3: x /= 2                       // posun na bit X
+    q_1_D+4: if x \% 2 == 0 goto q_1_D+7 
+    q_1_D+5: x *= 2       // ak nesedi ani X, vratime hlavu na Y
+    q_1_D+6: GOTO(q_1_#) // nepodmienecny skok na overenie ďalšieho symbolu
+    q_1_D+7: x *= 2       // ďalej následuje vykonanie prechodu pre symbol S
+    q_1_D+8: return 0;    // 1 nie je definovana pre stav q_1
+    q_1_#:   return 0;
+
+    q_f: return 1
+    \end{verbatim}
+    \normalsize
+
+    Napr. pre $w = 1$, ktoré patrí do $L(M)$ by binárne zakódovanie $x_0$ bolo $00 11 00 01$.
+    Po štarte by program najpr spravil 2x shift R, čo je delenie dvomi, teda stav registra $x$
+    by nadobudol hodnotu $001100.01$, teda desatinná čiarka by bola za znakom, ktorý reprezentuje
+    $\Delta$. Po následnej sekvencii overovania by program vykonal príkazy, začínajúce na riadku
+    \texttt{q\_0\_D} a posunul sa na riadok \texttt{q\_1} so stavom registra $x = 00 11.0001$. Následne by program
+    vykonal sekvenciu na riadku \texttt{q\_1\_1} odpovedajúcu prechodu $\delta(q_1, 1) = (q_f, R)$,
+    a nakoniec so stavom $x = 00.110001$ by vykonal príkaz $return 1$.
+    
 
 \subsection*{B - RationalC na TS}
 TODO
