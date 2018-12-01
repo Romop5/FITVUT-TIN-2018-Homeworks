@@ -42,7 +42,7 @@
 \maketitle
 
 \section*{Úloha č.1}
-Podľa definície 4.29 (opora, str. 97) je Dyckov jazyk na jednou dvojicou [] generovaný 
+Podľa definície 4.29 (opora, str. 97) je Dyckov jazyk nad jednou dvojicou [] generovaný 
 gramatikou s nasledujúcimi pravidlami, ktorú označme $G_D$:
 \begin{align}
     S \to [ S ] | SS | \epsilon
@@ -69,12 +69,13 @@ použité v prvej derivácii pri generovaní reťazca $w$:
         preto zjavne pravidlo $S \to [S]$ musí byť použité aspoň raz v postupnosti derivácii vetnej
         formy $SS$. Nutne teda platí, že z vetnej formy $SS$ deriváciami získame vetnú formu $S^N$.
         Zjavne aspoň jedno $S$ musí byť prepísané pravidlom $S \to [S]$. Zaujíma nás ten najľavejší
-        prepísaný nonterminál $S$. Potom vzniknutá vetná forma má tvar $[S]S^N$. Zjavne platí, že
-        $S \Rightarrow SS \Rightarrow SSS \Rightarrow^* S^N \Rightarrow v, v \in L$. Teda reťazec $w$
-        je konkatenáciou $[u]v$, kde $S\Rightarrow^*u$ a $S \Rightarrow* S^N \Rightarrow* v$. Zjavne
+        prepísaný nonterminál $S$. Potom vzniknutá vetná forma má tvar $[S]S^{N-1}$. Zjavne platí, že
+        $S \Rightarrow SS \Rightarrow SSS \Rightarrow^* S^{N-1} \Rightarrow v, v \in L$. Teda reťazec $w$
+        je konkatenáciou $[u]v$, kde $S\Rightarrow^*u$ a $S \Rightarrow^* S^N \Rightarrow^* v$.
+        Dokopy $S \Rightarrow SS \Rightarrow [S]S \Rightarrow^+ [u]S \Rightarrow^* [u]S^{N-1} \Rightarrow^* [u]v$. Zjavne platí, že
         $|w| = 2 + |u|+|v|$.
 \end{enumerate}
-Ukázali sme teda, že každý neprázdny reťazec $w \in L$ je možné rozložiť na $[u]v$, kde $u,v \in L$.
+Ukázali sme teda, že každý neprázdny reťazec $w \in L$ je možné rozložiť na $[u]v$, kde $u,v \in L$ a zároveň počet znakov $[$ je v $u$ i $v$ ostro menší ako vo $w$.
 
 \subsection*{Čásť B}
 \begin{proof}
@@ -139,7 +140,7 @@ Uvažujme iteráciu pumpovania $i = 1+p$.
 Najprv formálne definujme jazyky MP a jazyk Affine, medzi ktorými budeme definovať redukciu
 $\sigma$. 
 \begin{enumerate}
-    \item MP = \{<M>\#<w> | TS M s kódom <M> zastaví na reťazci s kódom <w>\} $\subset \{0,1,\#\}^*$ 
+    \item MP = \{<M>\#<w> | TS M s kódom <M> prijima reťazec s kódom <w>\} $\subset \{0,1,\#\}^*$ 
     \item TuringAffine = \{<M>| jazyk TS s kódom <M> obsahuje aspoň 1 reťazec z jazyka Affine\}
         $\subset \{0,1\}^*$ 
 \end{enumerate}
@@ -163,7 +164,7 @@ Pre kód <M>\#<w> inštancie MP problému TS $M\sigma$ vygeneruje na výstupnú 
 \begin{itemize}
     \item Kód univerzálneho TS $M_{UTS}$, ktorý na svojej páske v tvare $\Delta <M>\#<w> \Delta$ simuluje
         prijatie reťazca s kódom $<w>$ TS s kódom $<M>$, je konštantný literál, ktorý je nezávislý
-        na obsahu vstupnej pásky a je možné vytvoriť úplný TS, ktorý kód univerzálneho TS na pásku. 
+        na obsahu vstupnej pásky a je možné vytvoriť úplný TS, ktorý vypíše kód univerzálneho TS na pásku. 
     \item Kód TS $M_{valid}$, ktorý overuje, či kód TS <M> na páske je validne sformovaný, teda či <M> patrí do jazyka
         korektne zakódovaných TS, je literál TS simulujúceho beh konečného automatu. Tento kód je
         konštantný.
@@ -173,7 +174,7 @@ Pre kód <M>\#<w> inštancie MP problému TS $M\sigma$ vygeneruje na výstupnú 
     \item Nakoľko $M_{UTS}$, $M_{valid}$ i $M_{erase}$ sú konštantne dané TS, sme v stave vytvoriť
         kód TS $M_{merged}$, ktorý bude obsahovať tieto TS a pomocnú stavovú logiku, ktorá prijme ak $M_{UTS}$
         skončí.
-    \item Nakoniec, sme v stave vytvoriť taký úplný TS $M\Sigma$, ktorý pred svoj vstup $<M>\#<w>$ vypíše na
+    \item Nakoniec, sme v stave vytvoriť taký úplný TS $M\sigma$, ktorý pre svoj vstup $<M>\#<w>$ vypíše na
         výstup kód TS <Mx>, ktorý bude obsahovať spojený TS $M_{merged}$, TS $M_copy$ a pomocné
         prechody medzi týmito TS.
     
@@ -182,7 +183,7 @@ Pre kód <M>\#<w> inštancie MP problému TS $M\sigma$ vygeneruje na výstupnú 
 \end{itemize}
 
 \subsection*{Korektnosť redukcie $\sigma$}
-Skúmajme jazyk L(Mx):
+Skúmajme jazyk $L(Mx)$:
 \begin{enumerate}
     \item $L(Mx) = \emptyset \iff$ <M> nie je korektný kód TS alebo TS <M> na slove <w> cyklí 
     \item $L(Mx) = \Sigma^* \iff$ <M> je správne sformulovaný kód TS a TS s kódom <M> prijíma kód <w>
@@ -220,7 +221,7 @@ Formálne sú rozhodovacie problémy nasledujúce:
 \begin{enumerate}
     \item TuringAffine = \{<M>| jazyk TS s kódom <M> obsahuje aspoň 1 reťazec z jazyka Affine\}
         $\subset \{0,1\}^*$ 
-    \item NEP = \{<M>| jazyk TS s kódom <M> obsahuje aspoň 1 (je neprázdny)\} $\subset \{0,1\}^*$ 
+    \item NEP = \{<M>| jazyk TS s kódom <M> obsahuje aspoň 1  reťazec (je neprázdny)\} $\subset \{0,1\}^*$ 
 \end{enumerate}
 
 Redukcia $\sigma: {0,1}^* \to {0,1}^*$, ktorá každej inštancii z jazyka TuringAffine priradí
@@ -231,17 +232,18 @@ realizuje nasledujúcu činnosť:
     \item TS Mx overí, či reťazec w na jeho vstupe patrí do jazyka Affine. Príslušnosť reťazca do
         jazyka Affine je realizovateľná pomocou TS - stačí spočítať počet symbolov 0 a 1 v reťazci
         w, previesť príslušné násobenie a odčítanie a porovnať výsledok voči nule. Konštanty
-        a0 a a1 môže mať daný TS zakódované vo svojom stavovom riadení.
+        a0 a a1 môže mať daný TS zakódované vo svojom stavovom riadení. Overenie, či reťazec patrí do jazyka
+        Affine je rozhodnuteľný problém. 
     \item Ak reťazec w nepatrí do jazyka Affine, potom TS Mx odmietne.
     \item Inak TS Mx posunie reťazec w, ktorý má zapísaný na páske, a skopíruje kód
         TS M <M>, čím na páske vznikne <M>\#w
     \item TS Mx overí, či TS s kódom <M> je korektne sformovaný TS. Ak nie odmietne.
-    \item Napokon, TS Mx s pomocou UTS simuluje prijatie reťazca w TS s kódom <M>. Ak TS s kódom <M>
+    \item Napokon, TS Mx s pomocou UTS simuluje prijatie reťazca $w$ TS s kódom <M>. Ak TS s kódom <M>
         odmietne reťazec w alebo cyklí, potom TS Mx odmietne, inak prijme.
 \end{enumerate}
 Skúmajme jazyk TS Mx:
 \begin{enumerate}
-    \item $L(Mx) = \emptyset \iff$ TS <M> nie je správne sformovaný alebo TS <M> je správne
+    \item $L(Mx) = \emptyset \iff$ TS s kódom <M> nie je správne sformovaný alebo TS <M> je správne
         sformovaný, ale L(M) neobsahuje ani jeden reťazec z jazyka Affine.
     \item $L(Mx) \neq \emptyset \iff$ TS <M> je správne sformovaný a L(M) obsahuje aspoň jeden reťazec
         z jazyka Affine
@@ -289,28 +291,30 @@ ako postupností symbolov z $\Gamma$ (opora, str. TODO).
 Prevod TS na RationalC sa skladá z nasledujúcich částí
 \subsubsection*{Prevod vstupnej pásky TS na číslo $x_0$}
     Vstupná páska TS má tvar $\Delta w \Delta$, kde $w \in \Sigma$. Keďže vieme, že program
-    $RacionalC$ má na vstupe celé číslo $x_0$ a naopak TS začína na pozícii $\Delta$, musíme
+    $RacionalC$ má na vstupe celé číslo $x_0$ a naopak TS začína na pozícii $\Delta$, jednoduchou konverziou by sme získali číslo,
+    ktoré má len desatinné miesta a prípadne jednotku. Preto musíme
     pred prevodom reťazec $\Delta w \Delta$ reverzovať. 
     Následne je páska $\Delta w^R \Delta$ obsahujúca znaky $0,1,\Delta$ je prevedená nasledujúco:
     \begin{align*}
         &\Delta \implies 00 &  & \#  \implies 01 &
         &0 \implies 10 &  &1 \implies 11 
     \end{align*}
+    Každý symbol z $\Gamma$ zakódujeme ako dvojicu bitov prirodzeného čísla $x0$.
     Kódovanie sme rozšírili o špeciálny symbol $\#$, ktorý nie je súčasťou páskovej abecedy.
     Tento špeciálny symbol je nutný pre korektné detekovanie stavu, kedy TS prepadla hlava.
 
-    Po prevedení symbolov w na takéto binárne kódovanie je výsledný reťazec interpretovaný ako
+    Po prevedení symbolov reťazca $w$ na takéto binárne kódovanie je výsledný reťazec interpretovaný ako
     binárne zakódované prirodzené číslo rozšírené o kód symbolu $\#$.
 
     Príklad: $w = \Delta011\Delta$ sa po reverzácii na $\Delta110\Delta$ a pridaní zarážky,
     reprezentujúcej prepad hlavy rovná reťazcu $\Delta110\Delta \#$, čo sa zakóduje na $00 11 10 10 00
     01$, teda na prirodzené číslo $929$. Vďaka kódu $00$ pre $\Delta$ obsahuje racionálne číslo nekonečno znakov
     reprezentujúcich $\Delta$ z prava aj z ľava pôvodonej pásky $w$, pretože dvojica 00 pridaná
-    pred aj na koniec binárnej reprezentácie čísla nemení jeho význam.
+    pred aj na koniec binárnej reprezentácie (pozn. za desatinnú čiarku) čísla nemení jeho význam.
 
     Nakoľko sme oproti reprezentácii pásky TS posunuli desatinnú čiarku pridaním oddelovača $\#$, je
     nutné na začiatku programu \textit{RacionalC} vykonať 2x príkaz $x \setminus = 2;$ aby sme posunuli čiarku na
-    správne miesto a program začal s desatinnou čiarkou pred symbolom $\#$, teda pred prefixom $01$.
+    správne miesto a program začal s desatinnou čiarkou pred symbolom $\#$, teda pred suffixom $01$.
 
 \subsubsection*{Prevod jednotlivých pravidiel TS na príkazy jazyka \textit{RacionalC}}
     Jednotlivé stavy TS sú v \textit{RationalC} reprezentované sekvenciou príkazov. 
@@ -323,6 +327,7 @@ Prevod TS na RationalC sa skladá z nasledujúcich částí
     q_f: return 1;
     \end{verbatim}
 
+    Symboly $q_f, q, q\_0$ a pod. označujú symbolicky číslo riadku, na ktorom začína daná sekvencia. 
     Realizáciu nejakého nekoncového stavu $q$ z TS je možné vyjadriť nasledujúcim pseudo kódom:
     \begin{verbatim}
     q: 
@@ -335,11 +340,10 @@ Prevod TS na RationalC sa skladá z nasledujúcich částí
     q_#:   return 0 // pre # doslo k prepadnutiu hlavy
     \end{verbatim}
 
-    Poznámka: ak pre daný stav nie je prechod pre daný symbol definovaný, potom je sekvencia
+    Poznámka: ak pre daný stav nie je prechod pre daný symbol z $\Gamma$ v TS definovaný, potom je sekvencia
     "vykonaj prechod" nahradená jediným príkazom $return 0;$, ktorý odpovedá zastaveniu TS na
     nedefinovanom prechode.
 
-    Symboly $q, q\_0$ a pod. označujú symbolicky číslo riadku, na ktorom začína daná sekvencia. 
     Realizáciu jednotlivých overení pre každý zakódovaný symbol $S$ z $\Gamma$ môžeme vyjadriť
     nasledujúcou sekvenciou príkazov, kde $X$ a $Y$ je kód symbolu z prekódovania vyššie (napr. $0 =
     10 \implies X = 1 \land Y = 0$).
@@ -348,7 +352,7 @@ Prevod TS na RationalC sa skladá z nasledujúcich částí
     q_S:   if x \% 2 == Y goto q_S+3    // zaciname na bite Y
     q_S+1: GOTO(q_next)                 // ak Y nesedi, skusime iny symbol 
     q_S+3: x /= 2                       // posun na bit X
-    q_S+4: if x \% 2 == Y goto q_S+7 
+    q_S+4: if x \% 2 == X goto q_S+7 
     q_S+5: x *= 2       // ak nesedi ani X, vratime hlavu na Y
     q_S+6: GOTO(q_next) // nepodmienecny skok na overenie ďalšieho symbolu
     q_S+7: x *= 2       // ďalej následuje vykonanie prechodu pre symbol S
@@ -361,7 +365,7 @@ Prevod TS na RationalC sa skladá z nasledujúcich částí
 
     Sekvencia príkazov odpovedajúca vykonaniu prechodu je potom závislá na konkrétnom type prechodu.
     
-    Pre \textbf{zápis symbolu} $x \in \Gamma$, ktorého kód je rovný $XY$ a prechod do stavu $p$ ide o
+    Pre \textbf{zápis symbolu} $x \in \Gamma$, ktorého kód je rovný $XY$ a prechod do stavu $q_{next}$ ide o
     nasledujúcu sekvenciu:
     \begin{verbatim}
     q_S_X:   WRITE(Y)
@@ -372,7 +376,7 @@ Prevod TS na RationalC sa skladá z nasledujúcich částí
     \end{verbatim}
     Poznámka: Makro \textbf{WRITE(Z)} sa expanduje pre $Z = 0$ na $x = even(x)$, pre $Z = 1$ na $x = odd(x)$ 
 
-    \textbf{Posun hlavy} na páske smerom $Z = {L,R}$ a prechod na stav $s$:
+    \textbf{Posun hlavy} na páske smerom $Z = {L,R}$ a prechod na stav $q_{next}$:
     \begin{verbatim}
     q_S_X: SHIFT(Z) 
     q_S_X: SHIFT(Z)  
@@ -388,7 +392,7 @@ Prevod TS na RationalC sa skladá z nasledujúcich částí
     ekvivalentne v príkazoch \textit{RationalC}. 
     Zároveň program v \textit{RationalC} korektne detekuje prepadnutie hlavy, zastavenie na
     nedefinovanom prechode pre daný stav (return 0) a konečne prijatie v stave $q_f$.
-    \subsubsection{Príklad prevodu TS na program}
+    \subsubsection*{Príklad prevodu TS na program}
 
     Uvažujme TS $M = (Q, \Sigma, \Gamma, \delta, q_0, q_f)$, kde $Q = \{q_0, q_1,q_f\}$, $\Sigma =
     \{0,1\}$, $\Gamma = \{0,1,\Delta\}$, a
@@ -401,7 +405,7 @@ Prevod TS na RationalC sa skladá z nasledujúcich částí
         \item Pre koncový stav $q_f$ vygenerujeme $q_f: return 1$.
     \end{enumerate}
 
-    Dostaneme nasledujúci kód:
+    Dostaneme nasledujúci kód programu \textit{RationalC}, reprezentujúci TS $M$:
     \footnotesize \begin{verbatim}
     0: SHIFT(R) // posun desatinnej ciarky
     1: SHIFT(R) 
@@ -496,7 +500,7 @@ pri štarte desatinnú čiarku na konci reťazca, kdežto TS na začiatku pásky
 Prirodzené číslo 29 má binárne zakódovanie 11101. Jeho reverzáciou získavame 10111 a dokopy
 počiatočnu pásku $\Delta 11101 \Delta$. 
 Zároveň pridáme do TS jeden extra počiatnočný stav, ktorý posunie hlavu do prava a prejde na
-počiatočný stav programu.
+na stav TS, reprezentujúci počiatok programu.
 
 \subsubsection*{Prevod programu na stavy}
 Pred tým, než zadefinujeme prevod na TS, je nutné uvažovať na situáciami, ktoré musí TS korektne
@@ -510,21 +514,34 @@ hlavou na 0, zavedením pomocného stavu a dvojicou prechodou (posun hlavy a zá
 
 Samotný prevod príkazov vykonáme nasledovne. Každý riadok s príkazom programu \textit{RationalC} je realizovaný ako jeden unikátny stav v TS.
 Implicitne, po vykonaní každého príkazu (okrem if) následuje zmena stavu na stav, reprezentovaný
-nasledujúcim riadkom v programe. V TS preto po vykonaní prechodu,  
+nasledujúcim riadkom v programe. 
 
 Uvažujme nasledujúce ekvivalentné vyjadrenie:
 \begin{enumerate}
     \item \textbf{return} 0 => abnormálne zastavenie TS (napr. pomocou prepadnutia hlavy)
     \item \textbf{return} 1 => prechod do koncového stavu $q_F$
-    \item x = \textbf{odd}(x) => nepodminenený zápis 1 pod čtecí hlavou
-    \item x = \textbf{even}(x) => nepodminenený zápis 1 pod čtecí hlavou
+    \item x = \textbf{odd}(x) => nepodmienenený zápis 1 pod čtecí hlavou
+    \item x = \textbf{even}(x) => nepodmienenený zápis 0 pod čtecí hlavou
     \item x \textbf{*=} x => posun hlavy do ľava (reverzácia)
     \item x \textbf{$\setminus$=} x => posun hlavy do prava (reverzácia)
     \item if \textbf{x \%2} == b goto N => pre symbol B = {0,1} na páske preveď prechod do stavu na riadku N. Zároveň je pridaný prechod pre symbol $C = {0,1}\setminus {B}$, ktorý
         vykoná prechod do stavu na riadku pod aktuálnym IF príkazom.
 \end{enumerate}
 
-\subsection{Demonštrácia prevodu programu na TS}
+Pri realizácii príkazov $x *= 2$ a $x \setminus = 2$ je nutné zaviesť pomocné stavy, ktoré umožňia ošetriť prechod, pri ktorom by sa pod hlavou objavil symbol 
+$\Delta$. Pri prechode do prava v TS je nutné vygenerovať pomocný stav, ktorý pre symbol $\Delta$ zapíše 0 na pásku. Pre zvyšné symboly $\Gamma$ vygenerujeme prechod do ďalšieho stavu,
+do ktorého pôvodne mal prejsť príkaz programu.
+
+Pre prechod do ľava vygenerujeme unikátny stav, ktorý pre symboly ${0,1}$ prejde do dalšieho stavu. Pre symbol $\Delta$ sa aktivuje podstroj TS, ktorý sa dá popísať nasledujúco:
+$L_\Delta S_R R_\Delta 0$.
+Stroj najpr presunie hlavu na pozíciu prvej $\Delta$ na páske. Následne posunie celý obsah pásky o jednu pozíciu smerom do prava. Následne sa stroj presunie do ľava na prvú pozíciu
+blanku, na ktorú zapíše 0. Následne prechádza stroj do stavu, do ktorého by prešiel pôvodný príkaz.
+Stroj vlastne realizuje rozšírenie pásky o 1 nulový symbol z prava. Týmto sme ošetrili situáciu, kedy program rozširuje desatinné miesta racionálneho čísla a TS by prepadla hlava.
+
+V predchádzajúcom texte sme predstavili spôsob, akým ekvivalentne zakódovať program v \textit{RationalC} do TS. Prevod ošetruje situácie, ktoré by mohli viesť ku problémom (rozširovanie reprezentácie
+racionálneho čísla v registry x0).
+
+\subsection*{Demonštrácia prevodu programu na TS}
 Uvažujme príklad č.1 zo zadania domácej úlohy. Pre každý príkaz s číslom $\{0,1...,6\}$ vytvoríme stav $q_i, i \in {0,...6}$
 Pred jednotlive riadky programu následne pridáme prechody.
 
@@ -555,6 +572,6 @@ prechody, ktorý zabezpečia rozšírenie pásky o znak 0 v prípade, že po del
     $\delta(q_3t, 0) = (q_4, 0)$ \\
     $\delta(q_3t, 1) = (q_4, 1)$ \\
 
-TS $M = (Q, \Sigma, \Gamma, \delta, q_0, q_f)$, kde $Q = \{q_0, q_1,q_1t,q_2,q_3,q_3t,q_4,q_5,q_6,_qf\}$, $\Sigma = {0,1}, \Gamma = \Sigma \cup {\Delta}$ realizuje 
+Vznikol nám TS $M = (Q, \Sigma, \Gamma, \delta, q_0, q_f)$, kde $Q = \{q_0, q_1,q_1t,q_2,q_3,q_3t,q_4,q_5,q_6,_qf\}$, $\Sigma = {0,1}, \Gamma = \Sigma \cup {\Delta}$ realizuje 
 ekvivalentne program z príkladu č.1.
 \end{document}
