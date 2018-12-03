@@ -79,12 +79,13 @@ Ukázali sme teda, že každý neprázdny reťazec $w \in L$ je možné rozloži
 
 \subsection*{Čásť B}
 \begin{proof}
-    Dokazujeme, že $\forall i \in \mathbb{N}_0: \forall w \in L: \#_[(w) = i \implies w \in L(G)$. V dokaze
+    Dokazujeme, že $\forall i \in \mathbb{N}_0: \forall w \in L: \#_[(w) = i \implies w \in L(G)$. V
+    dôkaze
     využívame gramatiku $G_D$, definovanú vyžšie (1). Pokiaľ derivácia nie je označená konkrétnou
     gramatikou, implicitne uvažujeme gramatiku $G$ zo zadania úlohy.\\
 
     Pre $i = 0$ tvrdenie platí, pretože epsilon je jediný reťazec v jazyku L taký, že $\#_[(\epsilon)
-    = 0)$, zároveň platí, že $S \Rightarrow_{G_D} \epsilon$, teda $\epsilon \in L$ a tiež $S
+    = 0$, zároveň platí, že $S \Rightarrow_{G_D} \epsilon$, teda $\epsilon \in L$ a tiež $S
     \Rightarrow_{G} \epsilon$, teda $\epsilon \in L(G)$. 
 
     Predpokladajme, že tvrdenie platí pre $j <  i$ a uvažujme platnosť tvrdenia $\forall w \in L: \#_[(w) = i \implies w \in L(G)$
@@ -112,17 +113,18 @@ bezkontextový.
 \begin{proof}
 Nech $L$ je bezkontextový jazyk nad abecedou $\Sigma$. Potom existuje konštanta $k > 0$ taká, že platí:
     \begin{align}
-        \forall z \in L \land |z| \geq k: \exists u,v,w,x,y \in \Sigma^*: z = uvwxy \land |vwx| \leq
+        \forall z \in L \land |z| \geq k: \exists u,v,w,x,y \in \Sigma^*: z = uvwxy \land vx \neq
+        \epsilon  \land |vwx| \leq
         k \land \forall i \geq 0: uv^iwx^iy \in L
     \end{align}
 Nech existuje konštanta $k > 0$ a reťazec $z=a^p$, kde $p$ je prvočíslo a zároveň $p > k$. Potom
 podľa Pumping Lemma platí, že:
     \begin{align}
-        \exists u,v,w,x,y \in \Sigma^*: z = uvwxy \land |vwx| \leq
+        \exists u,v,w,x,y \in \Sigma^*: z = uvwxy \land vx \neq \epsilon \land |vwx| \leq
         k \land \forall i \geq 0: uv^iwx^iy \in L
     \end{align}
-    Uvažujme ľubovoľné konštanty $b, c,d \in \mathbb{N}_0$ také, že $a^ba^c \neq \epsilon$ a $u = a^b \land x =
-    a^c \land w = a^d$ tak, že $|uwx| \leq k$ Zároveň zvoľme ľubovoľne $uy$ tak, nech platí, že $z = uvwxy$.
+    Uvažujme ľubovoľné konštanty $b, c,d \in \mathbb{N}_0$ také, že $a^ba^c \neq \epsilon$ a $v = a^b \land x =
+    a^c \land w = a^d$ tak, že $|vwx| \leq k$ Zároveň zvoľme ľubovoľne $uy$ tak, nech platí, že $z = uvwxy$.
     Plati, že $uvwxy = ua^bwa^cy \in L$.
 
 Uvažujme iteráciu pumpovania $i = 1+p$. 
@@ -175,7 +177,7 @@ Pre kód <M>\#<w> inštancie MP problému TS $M\sigma$ vygeneruje na výstupnú 
         kód TS $M_{merged}$, ktorý bude obsahovať tieto TS a pomocnú stavovú logiku, ktorá prijme ak $M_{UTS}$
         skončí.
     \item Nakoniec, sme v stave vytvoriť taký úplný TS $M\sigma$, ktorý pre svoj vstup $<M>\#<w>$ vypíše na
-        výstup kód TS <Mx>, ktorý bude obsahovať spojený TS $M_{merged}$, TS $M_copy$ a pomocné
+        výstup kód TS <Mx>, ktorý bude obsahovať spojený TS $M_{merged}$, TS $M_{copy}$ a pomocné
         prechody medzi týmito TS.
     
     \item Redukcia je potom funkcia $\sigma: \{0,1,\#\}^* \to \{0,1\}^*$, ktorá je realizovaná úplnym
@@ -224,7 +226,7 @@ Formálne sú rozhodovacie problémy nasledujúce:
     \item NEP = \{<M>| jazyk TS s kódom <M> obsahuje aspoň 1  reťazec (je neprázdny)\} $\subset \{0,1\}^*$ 
 \end{enumerate}
 
-Redukcia $\sigma: {0,1}^* \to {0,1}^*$, ktorá každej inštancii z jazyka TuringAffine priradí
+Redukcia $\sigma: \{0,1\}^* \to \{0,1\}^*$, ktorá každej inštancii z jazyka TuringAffine priradí
 inštanciu jazyka NEP, by bola realizovaná nasledujúco:
 Úplný TS realizujúci redukciu $\sigma$ pre daný vstup má na svojom výstupe TS s kódom <Mx>, ktorý
 realizuje nasledujúcu činnosť:
@@ -279,16 +281,17 @@ Nakoniec, samotné prechody TS realizujú podmienené vykonávanie v závislosti
 Jednotlivé operácie je teda možné zakódovať ekvivalentne v TS aj v programe \textit{RacionalC}.
 
 V následujúcej časti predstavený príkladný spôsob zakódovania spolu s ošetrením špeciálneho
-chovania, akým je prepadnutie hlavy TS, či nekonečné rozširovanie reprezentácie racionálneho čísla
+chovania, akým je \textit{prepadnutie hlavy TS}, či \textit{nekonečné rozširovanie reprezentácie
+racionálneho čísla}
 do oboch smerov v programe \textit{RacionalC}.
 
 \subsection*{A - Prevod TS na RationalC}
-Podľa zadania prevádzame deterministický TS s abecedou $\Sigma = {0,1}$ a páskovou abecedou 
-$\Gamma = \Sigma \cup {\Delta}$. V prípade, že by pásková abeceda obsahovala ďalšie znaky, je možné 
-TS previesť na TS s $\Gamma = \Sigma \cup {\Delta}$ pomocou zakódovania symbolov rozšírenej páskovej abecedy
-ako postupností symbolov z $\Gamma$ (opora, str. TODO).
+Podľa zadania prevádzame deterministický TS s abecedou $\Sigma = \{0,1\}$ a páskovou abecedou 
+$\Gamma = \Sigma \cup \{\Delta\}$. V prípade, že by pásková abeceda obsahovala ďalšie znaky, je možné 
+TS previesť na TS s $\Gamma = \Sigma \cup \{\Delta\}$ pomocou zakódovania symbolov rozšírenej páskovej abecedy
+ako postupností symbolov z $\Gamma$ (opora, dôkaz vety 6.1.1 str. 123).
 
-Prevod TS na RationalC sa skladá z nasledujúcich částí
+Samotný prevod je definovaný ako prevod vstupnej pásky $w$ TS a prevod samotného $TS$ na program.
 \subsubsection*{Prevod vstupnej pásky TS na číslo $x_0$}
     Vstupná páska TS má tvar $\Delta w \Delta$, kde $w \in \Sigma$. Keďže vieme, že program
     $RacionalC$ má na vstupe celé číslo $x_0$ a naopak TS začína na pozícii $\Delta$, jednoduchou konverziou by sme získali číslo,
@@ -313,7 +316,7 @@ Prevod TS na RationalC sa skladá z nasledujúcich částí
     pred aj na koniec binárnej reprezentácie (pozn. za desatinnú čiarku) čísla nemení jeho význam.
 
     Nakoľko sme oproti reprezentácii pásky TS posunuli desatinnú čiarku pridaním oddelovača $\#$, je
-    nutné na začiatku programu \textit{RacionalC} vykonať 2x príkaz $x \setminus = 2;$ aby sme posunuli čiarku na
+    nutné na začiatku programu \textit{RacionalC} vykonať 2x príkaz $x /= 2;$ aby sme posunuli čiarku na
     správne miesto a program začal s desatinnou čiarkou pred symbolom $\#$, teda pred suffixom $01$.
 
 \subsubsection*{Prevod jednotlivých pravidiel TS na príkazy jazyka \textit{RacionalC}}
@@ -486,15 +489,17 @@ Prevod TS na RationalC sa skladá z nasledujúcich částí
     
 
 \subsection*{B - RationalC na TS}
-TODO
 
-Prirodzené číslo $x_0$ môžeme reprezentovať ako binárne kódovaný číslo. Na počiatku má teda páska
+Prirodzené číslo $x_0$ môžeme reprezentovať ako binárne kódované číslo. Na počiatku má teda páska
 tvar $\Delta w^R \Delta$, kde $w$ je binárne zakódované prirodzené číslo $x_0$ a zároveň obsahuje TS sekvenciu
 prechod do prava, ktoré posunú hlavu na tú pozíciu, ktorá v pôvodnom racionálnom čísle
 predstavovala desatinnú čiarku. Desatinná čiarka simulovaného registra $x_0$ sa v TS nachádza vždy
 za pozíciou hlavy.
 Podobne ako pri prevode na program, aj tu je nutno užiť reverzáciu reťazca z dôvodu, že program má
 pri štarte desatinnú čiarku na konci reťazca, kdežto TS na začiatku pásky.
+V prípade, že by prirodzené číslo bolo rovné 0, volíme neprádznu binárnu reprezentáciu pomocou 0.
+Konvertovaný TS teda po počiatočnom posunutí hlavy vždy začne na takej pozícii pásky, ktorá obsahuje
+len znaky 0 a 1.
 
 \textbf{Príklad:}
 Prirodzené číslo 29 má binárne zakódovanie 11101. Jeho reverzáciou získavame 10111 a dokopy
@@ -505,8 +510,8 @@ na stav TS, reprezentujúci počiatok programu.
 \subsubsection*{Prevod programu na stavy}
 Pred tým, než zadefinujeme prevod na TS, je nutné uvažovať na situáciami, ktoré musí TS korektne
 ošetriť. Pôvodný program totiž pracuje s neobmedzeným racionálnym číslom, teda s páskou, ktorá
-rastie do oboch strán. Naproti tomu, TS má pásku obmedzenú z ľava. Preto nutne bude TS pri posunutí
-hlavy do ľava kontrolovať, či po prechode nemá pod hlavou blank. Ak áno, potom aktivuje TS, ktorý
+rastie do oboch strán. Naproti tomu, TS má pásku obmedzenú z ľava. Preto nutne bude TS pri \textit{posunutí
+hlavy do ľava} kontrolovať, či po prechode nemá pod hlavou blank. Ak áno, potom aktivuje TS, ktorý
 skočí na ďalší blank do prava, vykoná shift do prava, skočí na blank v ľavo, zapíše 0 a pokračuje.
 
 Podobne, pri skoku do ľava je nutné prepísať prípadný blank, ktorý sa po prechode môže vyskytnúť pod
@@ -522,18 +527,22 @@ Uvažujme nasledujúce ekvivalentné vyjadrenie:
     \item \textbf{return} 1 => prechod do koncového stavu $q_F$
     \item x = \textbf{odd}(x) => nepodmienenený zápis 1 pod čtecí hlavou
     \item x = \textbf{even}(x) => nepodmienenený zápis 0 pod čtecí hlavou
-    \item x \textbf{*=} x => posun hlavy do ľava (reverzácia)
-    \item x \textbf{$\setminus$=} x => posun hlavy do prava (reverzácia)
-    \item if \textbf{x \%2} == b goto N => pre symbol B = {0,1} na páske preveď prechod do stavu na riadku N. Zároveň je pridaný prechod pre symbol $C = {0,1}\setminus {B}$, ktorý
+    \item x \textbf{*=} 2 => posun hlavy do ľava (reverzácia)
+    \item x \textbf{$/$=} 2 => posun hlavy do prava (reverzácia)
+    \item if \textbf{x \%2} == b goto N => pre symbol B = \{0,1\} na páske preveď prechod do stavu
+        na riadku N. Zároveň je pridaný prechod pre symbol $C = \{0,1\}/ \{B\}$, ktorý
         vykoná prechod do stavu na riadku pod aktuálnym IF príkazom.
 \end{enumerate}
 
-Pri realizácii príkazov $x *= 2$ a $x \setminus = 2$ je nutné zaviesť pomocné stavy, ktoré umožňia ošetriť prechod, pri ktorom by sa pod hlavou objavil symbol 
+Pri prevode jednotlivých príkazov teda zavedieme nové stav pre každý príkaz a sémantiku stavu
+vyjadríme zavedením prechodov TS zo stavu príkazu do ďalšieho stavu (prípadne do stavu N v prípade
+príkazu \textit{if}.). V prípade jednotlivých príkazov môžeme predpokladať, že pod hlavou budú vždy
+znaky 0 a 1.
+Pri realizácii príkazov $x *= 2$ a $x /= 2$ je nutné zaviesť pomocné stavy, ktoré umožňia ošetriť prechod, pri ktorom by sa pod hlavou objavil symbol 
 $\Delta$. Pri prechode do prava v TS je nutné vygenerovať pomocný stav, ktorý pre symbol $\Delta$ zapíše 0 na pásku. Pre zvyšné symboly $\Gamma$ vygenerujeme prechod do ďalšieho stavu,
 do ktorého pôvodne mal prejsť príkaz programu.
-
 Pre prechod do ľava vygenerujeme unikátny stav, ktorý pre symboly ${0,1}$ prejde do dalšieho stavu. Pre symbol $\Delta$ sa aktivuje podstroj TS, ktorý sa dá popísať nasledujúco:
-$L_\Delta S_R R_\Delta 0$.
+$R_\Delta S_R L_\Delta 0$.
 Stroj najpr presunie hlavu na pozíciu prvej $\Delta$ na páske. Následne posunie celý obsah pásky o jednu pozíciu smerom do prava. Následne sa stroj presunie do ľava na prvú pozíciu
 blanku, na ktorú zapíše 0. Následne prechádza stroj do stavu, do ktorého by prešiel pôvodný príkaz.
 Stroj vlastne realizuje rozšírenie pásky o 1 nulový symbol z prava. Týmto sme ošetrili situáciu, kedy program rozširuje desatinné miesta racionálneho čísla a TS by prepadla hlava.
@@ -574,4 +583,8 @@ prechody, ktorý zabezpečia rozšírenie pásky o znak 0 v prípade, že po del
 
 Vznikol nám TS $M = (Q, \Sigma, \Gamma, \delta, q_0, q_f)$, kde $Q = \{q_0, q_1,q_1t,q_2,q_3,q_3t,q_4,q_5,q_6,_qf\}$, $\Sigma = {0,1}, \Gamma = \Sigma \cup {\Delta}$ realizuje 
 ekvivalentne program z príkladu č.1.
+\subsection*{Záver úlohy č.4}
+Zjavne sme ukázali, že TS je možné ekvivalentne zakódovať v programe \textit{RacionalC} a naopak,
+teda nutne \textit{RacionalC} je Turing úplný.
+
 \end{document}
