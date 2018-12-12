@@ -61,7 +61,7 @@
     %%% 1 b)    
     \begin{proof}
         Nech $L_1 \in \mathcal{L}_3, L_2 \in \mathcal{L}_2^D$. Z vety 4.27 (skriptá) vieme, že trieda
-        $\mathcal{L}_2^D$ je uzavretá voči prieniku s jazykom triedy $\mathcal{L}_3^D$ a voči
+        $\mathcal{L}_2^D$ je uzavretá voči prieniku s jazykom triedy $\mathcal{L}_3$ a voči
         doplnku. 
         Preto $\overline{L_2} \in \mathcal{L}_2^D$ a zrejme $L_1 \cap \overline{L_2} \in
         \mathcal{L}_2^D$. Zároveň vieme, že $L_1$ aj $L_2$ sú množiny a platí pre ne vzťah $L_1
@@ -71,18 +71,20 @@
 \item 
     %%% 1 c)    
     \begin{proof}
-    Nech $L_1 = \Sigma^*$. Zjavne $L_1 \in \mathcal{L}_3$, kedže preň existuje deterministický konečný automat $M =
-        (\{q_0\},\Sigma, \delta, q_0, \{q_0\})$, kde $\forall a \in \Sigma : \delta(q_0, a) = q_0$.
-    Zároveň nech $L_2 \in \mathcal{L}_2$.
-
-        Predpokladajme, že $\Sigma^* \setminus L_2 \in \mathcal{L}_2$. Potom nasledujúcou úpravou
-        dostávame:
+        Nech je daná ľubovoľná abeceda $\Sigma$ a jazyk $L_1 = \Sigma^*$. Zjavne $L_1 \in
+        \mathcal{L}_3$, kedže pre neho  existuje deterministický konečný automat $M =
+        (\{q_0\},\Sigma, \delta, q_0, \{q_0\})$, kde $\forall a \in \Sigma : \delta(q_0, a) =
+        q_0$ taký, že $L(M) = L_1$.
+    Zároveň nech $L_2 \in \mathcal{L}_2$. Predpokladajme, že $\Sigma^* \setminus L_2 \in \mathcal{L}_2$. Potom nasledujúcou úpravou
+        z definície operácie $\setminus $ a definície doplnku dostávame:
         \begin{align*}
             \Sigma^* \setminus L_2 = \{w | w \in \Sigma^* \land w \notin L_2 \} = \overline{L_2} 
         \end{align*}
         Z predpokladu $ \Sigma^* \setminus L_2 \in \mathcal{L}_2$ dostávame $\overline{L_2} \in
         \mathcal{L}_2$, čo je spor, pretože z uzáverových vlastností bezkontextových jazykov vieme,
-        že $\overline{L_2} \notin \mathcal{L}_2$. Preto neplatí predpoklad a platí $L_1 \setminus L_2 \notin
+        že operácia doplnku nie je uzavretá (napr. doplnok ku jazyku
+        $\overline{\{a^nb^nc^n|n\geq1\}}$
+        je kontextový jazyk). Preto neplatí predpoklad a obecne neplatí, že $L_1 \setminus L_2 \in
         \mathcal{L}_2$.
     \end{proof}
 \end{enumerate}
@@ -96,7 +98,7 @@
         \delta (q_0, \#, a) &= (q_1, a)   & \delta (q_0, \#, Z) &= (q_1, Z)\\
         \delta (q_1, a, a) &= (q_1, \epsilon) & \delta (q_1, b, a) &= (q_2, \epsilon)\\
         \delta (q_1, 0, a) &= (q_1, a)   & \delta (q_2, \epsilon, a) &= (q1, \epsilon)\\
-        \delta (q_1, \epsilon, Z) &= (q3, \epsilon) & \delta (q_3, \epsilon, Z) &= (q_3, Z)\\
+        \delta (q_1, \epsilon, Z) &= (q_3, Z) & \delta (q_3,0, Z) &= (q_3, Z)\\
     \end{align*}
     Diagram výsledného automatu je znázornený na obrázku \ref{automata}. Výsledný DZA prijíma
     reťazec prechodom do koncového stavu a prečítaním celého vstupného reťazca.
@@ -118,7 +120,7 @@ a^k\#a^k$ z jazyka L, pre ktorý platí $|w| = 2k+1$, teda $|w|\geq k$, a platí
     \exists x,y,z \in (N \cup \Sigma)^*: w = xyz \land |xy| \leq k \land y \neq \epsilon : \forall i \in
     \mathbb{N}_0: xy^iz \in L 
 \end{align*}
-    Zvoľme ľubovoľné $l,n \in \mathbb{N}$ také, že platí $x = a^{n} \land y = a^{l} \land z =
+    Zvoľme ľubovoľné $l,n \in \mathbb{N}_0$ také, že platí $x = a^{n} \land y = a^{l} \land z =
     a^{k-l-n}\#a^k \land l > 0 \land n \geq 0 \land l+n \leq k$. Potom musí platiť, že $\forall
 i \in \mathbb{N}_0: xy^iz \in L$.
 
@@ -128,20 +130,22 @@ Uvažujme prípad $i = 0$. Potom by podľa prepokladu malo platiť $xz \in L$, l
 
 
 \section*{Úloha č.4}
-
+Neformálna idea (myšlienka) algoritmu spočíva v generovaní reťazcov \uv{odzadu}. Namiesto budovania prefixu z terminálov,
+ako to pomyslene robí pravá lineárna gramatika, vybudujeme terminálový suffix prijímaného reťazca.
+\subsection*{Algoritmus prevodu PLG na LLG}
 \textbf{Vstup:} Pravá lineárna gramatika $G_P = (N, \Sigma, P, S)$ taká, že $P$ obsahuje len pravidlá typu
-$A\to xB, x \in (N\cup\Sigma)^*, A,B \in N$ a typu $A\to x, x \in (N\cup\Sigma)^*, A \in N$\\
-\textbf{Výstup:} Ľavá lineárna gramatika $G_L = (N_1, \Sigma, P_1, S_1)$ taká, že $P$ obsahuje len pravidlá typu
-$A\to Bx, x \in (N\cup\Sigma)^*, A,B \in N$ a typu $A\to x, x \in (N\cup\Sigma)^*, A \in N$\\
+$A\to xB, x \in \Sigma^*, A,B \in N$ a typu $A\to x, x \in \Sigma^*, A \in N$\\
+\textbf{Výstup:} Ľavá lineárna gramatika $G_L = (N_1, \Sigma, P_1, S_1)$ taká, že $P_1$ obsahuje len pravidlá typu
+$A\to Bx, x \in \Sigma^*, A,B \in N$ a typu $A\to x, x \in \Sigma^*, A \in N$\\
 \textbf{Metóda:}
 \begin{enumerate}
     \item $N_1 = N \cup \{S_1\}$
-    \item Pre každé pravidlo z množiny $P$ typu $A\to xB, A,B \in N, x \in (N\cup\Sigma)^*$ pridaj
+    \item Pre každé pravidlo z množiny $P$ typu $A\to xB, A,B \in N, x \in \Sigma^*$ pridaj
         do množiny pravidiel $P_1$ pravidlo:\\
         \begin{align*}
             B\to Ax
         \end{align*}
-    \item Pre každé pravidlo z množiny $P$ typu $A\to x, A \in N, x \in (N\cup\Sigma)^*$ pridaj do
+    \item Pre každé pravidlo z množiny $P$ typu $A\to x, A \in N, x \in \Sigma^*$ pridaj do
         množiny pravidiel $P_1$ pravidlo:\\
         \begin{align*}
             S_1\to Ax
@@ -154,22 +158,33 @@ Pomocou vyžšie definovaného algoritmu predvedieme príklad transformácie gra
 P = \{S\to abA|bS, A\to bB|S|ab, B\to \epsilon | aA \}$:
 \begin{enumerate}
     \item $N_1 = \{S, A, B\} \cup \{ S_1\}$
-    \item $P_1$: 
+    \item Do množiny $P_1$ pridáme nasledujúce pravidlá (konvencia $p \in P  \Longrightarrow
+        p \in P_1$): 
             \begin{align*}
-                A&\to Sab  & S&\to Sb\\
-                B&\to Ab   & B&\to Ab\\
-                S&\to A    & A&\to Ba
+       S\to abA \Longrightarrow  A&\to Sab  &  S\to bS \Longrightarrow  S&\to Sb\\
+        A\to bB \Longrightarrow   B&\to Ab   & A\to S \Longrightarrow   S&\to A \\ 
+         B\to aA \Longrightarrow  A&\to Ba
             \end{align*}
     \item $P_1$: 
             \begin{align*}
-                S_1&\to Aab & S_1&\to B\epsilon
+          A\to ab \Longrightarrow       S_1&\to Aab & B\to \epsilon \Longrightarrow   S_1&\to B\epsilon
             \end{align*}
+    \item $P_1 = P_1 \cup \{S \to \epsilon\}$
     \item $G_L = (N_1, \{a,b\}, P_1, S_1)$
 
 \end{enumerate}
+\subsection*{Demonštráčná derivácia}
+Uvažujme reťazec $abbab$. V gramatikách $G$ a $G_1$ je možné vygenerovať uvažovaný reťazec v
+nasledujúcich deriváciach:
+\begin{align*}
+    S \Rightarrow_G abA \Rightarrow_G abbB \Rightarrow_G abbaA \Rightarrow_G abbabB \Rightarrow_G
+    abbab\\
+    S_1 \Rightarrow_{G_L} B \Rightarrow_{G_L} Ab \Rightarrow_{G_L} Bab \Rightarrow_{G_L} Abab \Rightarrow_{G_L} Sabbab \Rightarrow_{G_L} abbab
+\end{align*}
+
 
 \section*{Úloha č.5}
-Podľa Myhill-Nerudovej vety pre jazyk $L$ existuje deterministický konečný automat M taký, že $L(M)
+Podľa Myhill-Nerudovej vety (veta 3.20, skriptá, str. 48) pre jazyk $L$ existuje deterministický konečný automat M taký, že $L(M)
 = L$, práve vtedy ak prefixová ekvivalencia $\sim_L$ má konečný index. Budeme sa teda snažiť
 dokázať, že jazyk $L$ má $\sim_L$ s konečným indexom.
 
@@ -207,7 +222,7 @@ DKA automat pre tento jazyk je znázornený na obrázku 2. Jednotlivé stavy aut
     \label{automata}
     \centering
     \includegraphics[height=6cm]{dfa.pdf}
-    \caption{Diagram DFA z úlohy č.5.}
+    \caption{Diagram DKA z úlohy č.5.}
 \end{figure}
 
 
