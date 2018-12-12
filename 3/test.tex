@@ -1,0 +1,80 @@
+\documentclass{article}
+\usepackage[x11names, rgb]{xcolor}
+\usepackage[utf8]{inputenc}
+\usepackage{tikz}
+\usetikzlibrary{snakes,arrows,shapes}
+\usepackage{amsmath}
+%
+%
+
+%
+
+%
+
+\begin{document}
+\pagestyle{empty}
+%
+%
+%
+
+\enlargethispage{100cm}
+% Start of code
+% \begin{tikzpicture}[anchor=mid,>=latex',line join=bevel,]
+\begin{tikzpicture}[>=latex',line join=bevel,]
+  \pgfsetlinewidth{1bp}
+%%
+\pgfsetcolor{black}
+  % Edge: q3 -> q2
+  \draw [->] (248.73bp,13.591bp) .. controls (242.07bp,9.6157bp) and (234.29bp,5.771bp)  .. (226.59bp,3.748bp) .. controls (216.71bp,1.1504bp) and (213.53bp,1.3441bp)  .. (203.59bp,3.748bp) .. controls (199.39bp,4.7648bp) and (195.14bp,6.2483bp)  .. (181.71bp,12.368bp);
+  \definecolor{strokecol}{rgb}{0.0,0.0,0.0};
+  \pgfsetstrokecolor{strokecol}
+  \draw (215.09bp,11.248bp) node {0,1};
+  % Edge: start -> q1
+  \draw [->] (3.8478bp,26.748bp) .. controls (8.2235bp,26.748bp) and (19.002bp,26.748bp)  .. (40.435bp,26.748bp);
+  % Edge: q1 -> q1
+  \draw [->] (55.996bp,48.548bp) .. controls (55.194bp,58.66bp) and (57.645bp,67.496bp)  .. (63.348bp,67.496bp) .. controls (67.002bp,67.496bp) and (69.32bp,63.87bp)  .. (70.7bp,48.548bp);
+  \draw (63.348bp,74.996bp) node {0};
+  % Edge: q1 -> q2
+  \draw [->] (86.465bp,26.748bp) .. controls (97.053bp,26.748bp) and (109.87bp,26.748bp)  .. (131.88bp,26.748bp);
+  \draw (109.1bp,34.248bp) node {1};
+  % Edge: q2 -> q3
+  \draw [->] (183.52bp,37.273bp) .. controls (189.94bp,39.535bp) and (196.93bp,41.592bp)  .. (203.59bp,42.748bp) .. controls (213.66bp,44.494bp) and (216.55bp,44.649bp)  .. (226.59bp,42.748bp) .. controls (230.06bp,42.092bp) and (233.61bp,41.148bp)  .. (246.64bp,36.601bp);
+  \draw (215.09bp,51.248bp) node {1};
+  % Edge: q2 -> q3
+  \draw [->] (185.55bp,24.568bp) .. controls (198.02bp,23.805bp) and (213.06bp,23.251bp)  .. (226.59bp,23.748bp) .. controls (229.13bp,23.841bp) and (231.77bp,23.968bp)  .. (244.51bp,24.77bp);
+  \draw (215.09bp,31.248bp) node {0};
+  % Node: q1
+\begin{scope}
+  \definecolor{strokecol}{rgb}{0.0,0.0,0.0};
+  \pgfsetstrokecolor{strokecol}
+  \draw (63.348bp,26.748bp) node {q1};
+\end{scope}
+  % Node: start
+\begin{scope}
+  \definecolor{strokecol}{rgb}{1.0,1.0,1.0};
+  \pgfsetstrokecolor{strokecol}
+  \definecolor{fillcol}{rgb}{1.0,1.0,1.0};
+  \pgfsetfillcolor{fillcol}
+\end{scope}
+  % Node: q3
+\begin{scope}
+  \definecolor{strokecol}{rgb}{0.0,0.0,0.0};
+  \pgfsetstrokecolor{strokecol}
+  \draw (267.34bp,26.748bp) node {q3};
+\end{scope}
+  % Node: q2
+\begin{scope}
+  \definecolor{strokecol}{rgb}{0.0,0.0,0.0};
+  \pgfsetstrokecolor{strokecol}
+  \draw (158.84bp,26.748bp) node {q2};
+\end{scope}
+%
+\end{tikzpicture}
+% End of code
+
+%
+\end{document}
+%
+
+
+

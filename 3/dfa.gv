@@ -1,0 +1,15 @@
+digraph finite_state_machine {
+    rankdir=LR;
+    node [shape = point, color=white, fontcolor=white]; start;
+    node [shape = doublecircle, color=black, fontcolor=black]; qf;
+    node [shape = circle]; q1;
+    node [shape = circle]; q2;
+    start -> q0 [ label = "" ];
+      q0 -> q1 [ label = "Δ/R"];
+      q1 -> q1 [ label = "0/R"];
+      q1 -> q2 [ label = "1/R"];
+      q2 -> q2 [ label = "1/R"];
+      q2 -> q1 [ label = "0/R"];
+      q2 -> qf [ label = "Δ/R"];
+
+}

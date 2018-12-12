@@ -1,0 +1,80 @@
+ 
+\documentclass[10pt]{article}
+
+\usepackage[slovak]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+
+\usepackage{times}
+
+
+\usepackage[margin=1in]{geometry} 
+\usepackage{amsmath,amsthm,amssymb}
+ 
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+ 
+\newenvironment{theorem}[2][Theorem]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{lemma}[2][Lemma]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{exercise}[2][Exercise]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{reflection}[2][Reflection]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{proposition}[2][Proposition]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{corollary}[2][Corollary]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+ 
+\begin{document}
+ 
+% --------------------------------------------------------------
+%                         Start here
+% --------------------------------------------------------------
+ 
+%\renewcommand{\qedsymbol}{\filledbox}
+ 
+\title{TIN - Domáca úloha č. 3}%replace X with the appropriate number
+\author{Roman Dobiáš - xdobia11@stud.fit.vutbr.cz}
+ 
+\maketitle
+
+\section*{Úloha č.1}
+\section*{Úloha č.2}
+\section*{Úloha č.3}
+\section*{Úloha č.4}
+Rozhodovací problém farbenia grafov je jazyk ColorGraph = $\{$ (<V>,<E>#k) | G = (<V>, <E>) je graf
+ofarbitelný k farbami \}.
+Redukcia z farbenia grafov na problem tedy Kvety 
+\subsection*{Algoritmus prevodu}
+Každú inštanciu jazyka ColorGraph sme schopný previesť na problém Tety Kvety nasledujúci:
+\begin{itemize}
+    \item Pre každý uzol E vygenerujeme K+1 surovín, kde každá surovina má kapacitu 1 (teda, Teda
+        Kveta má práve 1 túto surovinu). K surovín reprezentuje jednotlivé z K farieb a K+1 surovina
+        je použitá pre detekovanie, či už je vrchol ofarbený.
+        Jednotlivé z K+1 surovín označme ako $E_i, 0 \leq i < k$.
+    \item Pre každé ofarbenie uzla E farbou F 
+    \begin{itemize}
+        \item vypočítame množinu vrcholov I takých, že existuje hrana medzi vrcholom E a vrcholom z
+            I a prizjednotíme vrchoľ E
+        \item vytvoríme "pečivo" $E_F$, ktorého ingrediencie sú suroviny $a_i, a \in I, i = F$ a
+            surovina $E_F$.
+    \end{itemize}
+    \item Pre takto zakódovaný problém riešime problém Tety Kvety pre počet priateľok $k$, kde $k = |V|$.
+    \item Graf je ofarbiteľný práve vtedy, ak môžeme každý vrchol ofarbiť farbou tak, že
+        priliehajúce vrcholy nemaju tú istú farbu.
+    \item Zrejme platí, že ak upečiem pečivo $E_F$, potom toto pečivo bude pre daný vrchol jediné
+        (vďaka surovine K+1) a zároveň priliehajúce vrcholy nebudú mať rovnaké pečivo (farbu),
+        pretože surovina ich farby už bola vyčerpaná pri pečení $E_F$.
+    \item Teda platí, že ak je možné upiecť N rôznych pečív, kde N je počet vrcholov a zároveň
+        platia tézy vyššie, potom graf je K-ofarbiteľný.
+\end{itemize}
+\subsection*{Príklad}
+Uvažujme graf A-B, B-C, C-D, D-A. 
+Reprezentáciu úlohy môžeme vyjadriť tabulkou:
+TODO
+suroviny ako hlavička, pečio ako riadky, Y osa ako vybrané pečivá
+\section*{Úloha č.5}
+\end{document}
