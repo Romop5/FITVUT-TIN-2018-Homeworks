@@ -42,10 +42,38 @@
 \maketitle
 
 \section*{Úloha č.1}
+\subsection*{Identifikácia funkcie}
+Zjavne sa jedná o \textit{Fibbonaciho postupnosť}. Páska č. 1 indikuje číslo N v zápise 1tiek, pre ktoré je funkcia Fib vypočítaná. Pásky 2 a 3 sľúžia na uchovanie predchádzajúcich dvoch
+hodnôt postupnosti. 
+
+Fibonačiho postupnosť je možné matematicky zadefinovať nasledujúco:
+\begin{align}
+    Fib(n) = 
+    \begin{cases}
+        0 & n = 0\\
+        Fib(n-1) & n = 1\\
+        Fib(n-1)\times Fib(n-2) & inak
+    \end{cases}
+\end{align}
+\subsection*{Vyjadrenie funkcie pomocou primitívnej rekurzie}
+
+Najprv zavedieme pomocnú funkciu \textit{mul}:
+
+\begin{align*}
+    mul(x,0) = \xi
+    mul(x,y+1) = plus (x, mul(y))
+\end{align*}
+
+
+\begin{align*}
+    Fib(0) = \xi () \\
+    Fib(x+1) = neq(x, 0) \times Fib(x monus 1) + Fib(x)
+\end{align*}
+
 \section*{Úloha č.2}
 \section*{Úloha č.3}
 \section*{Úloha č.4}
-Rozhodovací problém farbenia grafov je jazyk ColorGraph = $\{$ (<V>,<E>#k) | G = (<V>, <E>) je graf
+Rozhodovací problém farbenia grafov je jazyk ColorGraph = $\{$ (<V>,<E>\#k) | G = (<V>, <E>) je graf
 ofarbitelný k farbami \}.
 Redukcia z farbenia grafov na problem tedy Kvety 
 \subsection*{Algoritmus prevodu}
