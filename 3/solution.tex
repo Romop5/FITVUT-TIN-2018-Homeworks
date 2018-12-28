@@ -80,6 +80,48 @@ Diagonalizáciou ukážeme, že počet ohodnotení unárneho predikátu \textit{
     Uvažujme nekonečnú maticu
 \end{proof}
 \section*{Úloha č.3}
+
+\begin{proof}
+$\mathcal{O}(3^{2n}) \subseteq \mathcal{O}(2^{3n})$ \\
+Z definície pre každú funkciu $f \in \mathcal{O}(3^{2n})$ platí, že $\exists c \in \mathbb{R}: \exists n_0 \in \mathbb{N}: \forall n > n_0: f(n) \leq c\times 3^{2n}$.  
+Na to, aby $\mathcal{O}(3^{2n}) \subseteq \mathcal{O}(2^{3n})$ stačí ukázať, že každá funkcia $f \in \mathcal{O}(3^{2n})$ je ohraničená v $\mathcal{O}(2^{3n})$.
+
+Predpokladajme, že platí práve spomenutý vzťah. Potom pre každú funkciu $f$ platí, že $\exists c,d \in \mathcal{R}^+: c \times 3^{2n} \leq d \times 2^{3n}$. 
+
+Potom ale platia nasledujúce úpravy:
+
+\begin{align*}
+    c \times 3^{2n} \leq d \times 2^{3n}  \\
+    1 \leq \frac{d \times 2^{3n}}{c \times 3^{2n}} \\
+    1 \leq \frac{d}{c} \times \frac{2^{3n}}{3^{2n}} \\
+    1 \leq \frac{d}{c} \times (\frac{2^{3}}{3^{2}})^n \\
+    1 \leq \frac{d}{c} \times (\frac{8}{9})^n \\
+\end{align*}
+Platí, že $\lim_{n \to \infty} (\frac{8}{9})^n = 0$, teda platí, že $\lim_{n \to \infty} 1 \leq \frac{d}{c} \times (\frac{8}{9})^n  = 1 < 0$, čo je spor.
+Preto neplatí $\mathcal{O}(3^{2n}) \subseteq \mathcal{O}(2^{3n})$.
+\end{proof}
+
+\begin{proof}
+$\mathcal{O}(2^{3n}) \subseteq \mathcal{O}(3^{2n})$ \\
+Z definície pre každú funkciu $f \in \mathcal{O}(2^{3n})$ platí, že $\exists c \in \mathbb{R}: \exists n_0 \in \mathbb{N}: \forall n > n_0: f(n) \leq c\times 2^{3n}$.  
+Na to, aby $\mathcal{O}(2^{3n}) \subseteq \mathcal{O}(3^{2n})$ stačí ukázať, že každá funkcia $f \in \mathcal{O}(2^{3n})$ je ohraničená v $\mathcal{O}(3^{2n})$.
+
+Predpokladajme, že platí práve spomenutý vzťah. Potom pre každú funkciu $f$ platí, že $\exists c,d \in \mathcal{R}^+: c \times 2^{3n} \leq d \times 3^{2n}$. 
+
+Potom ale platia nasledujúce úpravy:
+
+\begin{align*}
+    c \times 2^{3n} \leq d \times 3^{2n}  \\
+    1 \leq \frac{d \times 3^{2n}}{c \times 2^{3n}} \\
+    1 \leq \frac{d}{c} \times \frac{3^{2n}}{2^{3n}} \\
+    1 \leq \frac{d}{c} \times (\frac{3^{2}}{2^{3}})^n \\
+    1 \leq \frac{d}{c} \times (\frac{9}{8})^n \\
+\end{align*}
+Ak zvolíme $d = c$, potom už pre $n = 0$ platí, že $1 \leq (\frac{9}{8})^n$.
+Ukázali sme teda, že pre každú $f \in \mathcal{O}(2^{3n})$ sme schopný nájsť danú konštantu $d$ tak, aby $f$ bola ohraničená funkciou $\mathcal{O}(3^{2n})$.
+Platí teda $\forall f \in \mathcal{O}(2^{3n}): f \in \mathcal{O}(3^{2n})$, teda platí $\mathcal{O}(2^{3n}) \subseteq \mathcal{O}(3^{2n})$. 
+\end{proof}
+
 \section*{Úloha č.4}
 Rozhodovací problém farbenia grafov je jazyk ColorGraph = $\{$ (<V>,<E>\#k) | G = (<V>, <E>) je graf
 ofarbitelný k farbami \}.
