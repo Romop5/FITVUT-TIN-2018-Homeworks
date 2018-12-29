@@ -77,10 +77,21 @@ Diagonalizáciou ukážeme, že počet ohodnotení unárneho predikátu \textit{
 
 \begin{proof}
     Predpokladajme, že počet realizácii je spočetný. Potom existuje zobrazenie $f: \mathbb{N} \to$ 
-    Uvažujme nekonečnú maticu
+    Uvažujme nekonečnú maticu:
+\begin{table}[]
+\begin{tabular}{llllll}
+    & 1   & 2   & 3    & 4  & ... \\
+p1  & a10 & a11 & a13  & a14 &     \\
+p2  & a20 & a21 & a23  & a24 &     \\
+p3  & a30 & a31 & a33  & a34 &     \\
+p4  & a40 & a41 & a43  & a44 &     \\
+... &     &   &   &   &
+\end{tabular}
+\end{table}
+
+
 \end{proof}
 \section*{Úloha č.3}
-
 \begin{proof}
 $\mathcal{O}(3^{2n}) \subseteq \mathcal{O}(2^{3n})$ \\
 Z definície pre každú funkciu $f \in \mathcal{O}(3^{2n})$ platí, že $\exists c \in \mathbb{R}: \exists n_0 \in \mathbb{N}: \forall n > n_0: f(n) \leq c\times 3^{2n}$.  
