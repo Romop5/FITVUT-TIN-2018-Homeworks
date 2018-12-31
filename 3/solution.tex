@@ -76,18 +76,22 @@ Výsledná funkcia $F(x)$ má potom tvar:
 Diagonalizáciou ukážeme, že počet ohodnotení unárneho predikátu \textit{u} nad spočetným univerzom je nespočetný. Počet ohodnotení predikátu je totiž rovný $2^{\mathbb{N}}$, pretože pre každý prvok x z $\mathbb{N}$ prvkov univerza môžeme definovať $p(x)$ alebo $\neg p(x)$.
 
 \begin{proof}
-    Predpokladajme, že počet realizácii je spočetný. Potom existuje zobrazenie $f: \mathbb{N} \to$ 
-    Uvažujme nekonečnú maticu:
-\begin{table}[]
+    Predpokladajme, že počet realizácii je spočetný. Potom existuje zobrazenie $f: \mathbb{N} \to \{true, false\}$ 
+    Jednotlivé realizácie môžeme vyjadriť ako nekonečný reťazec 0 a 1 a teda ich môžeme usporiadať do nekonečnej postupnosti.
+    Uvažujme nekonečnú maticu, kde $a_{ij}$ je 1 ak $a_j$ v realizácii $p_i$, alebo 0 ak $\neg a_j$ v realizácii $p_i$:
+\begin{table}[ht]
 \begin{tabular}{llllll}
     & 1   & 2   & 3    & 4  & ... \\
-p1  & a10 & a11 & a13  & a14 &     \\
-p2  & a20 & a21 & a23  & a24 &     \\
-p3  & a30 & a31 & a33  & a34 &     \\
-p4  & a40 & a41 & a43  & a44 &     \\
+    $p_1$  & $a_{11}$ & $a_{12}$ & $a_{13}$  & $a_{14}$ &     \\
+    $p_2$  & $a_{21}$ & $a_{22}$ & $a_{23}$  & $a_{24}$ &     \\
+    $p_3$  & $a_{31}$ & $a_{32}$ & $a_{33}$  & $a_{34}$ &     \\
+    $p_4$  & $a_{41}$ & $a_{42}$ & $a_{43}$  & $a_{44}$ &     \\
 ... &     &   &   &   &
 \end{tabular}
 \end{table}
+
+Uvažujme realizáciu $p_c(x) = 1 - p_x(x)$. Táto realizácia sa od každej realizácie líši
+    aspoň v jednom priradení a nenachádza sa medzi realizáciami $p_i, i \in \mathbb{N}$. Zároveň táto realizácia je validnou realizáciou a patrí do množiny realizácii. To je spor, preto množina realizácii je nutne nespočetná. 
 
 
 \end{proof}
