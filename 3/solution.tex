@@ -66,7 +66,11 @@ Funkciu $K$ definujeme pomocou primitívnej rekurzie nasledujúco:
     K(x+1) &= \pi_3^3 \times (plus  \mathbin{o} ( \pi_2^3 \times \pi_3^3)  (x, K(x))
 \end{align*}
 
-Výsledná funkcia $F(x)$ má potom tvar:
+Výpočet $K(0)$ je ekvivalentný návratovej dvojici $(0,1)$, ktorá zodpovedá hodnotám $(Fib(0), Fib(1))$. 
+Následne pomocou primitívnej rekurzie má $K(x+1)$ sémantiku v tvare $K(x+1) = (Fib(x), Fib(x) + Fib(x-1))$, teda
+$K(x+1) = (K(x).r, K(x).r + K(x).l)$, kde $l,r$ je ľavá, resp. práva hodnota dvojice.
+
+Výsledná funkcia $F(x)$, ktorej hodnota je rovná Fibbonačiho postupnosti, má potom tvar:
 
 \begin{align*}
     F(x) = (\pi_2^2 \mathbin{o} K) (x)
@@ -74,31 +78,31 @@ Výsledná funkcia $F(x)$ má potom tvar:
 
 \section*{Úloha č.2}
 Diagonalizáciou ukážeme, že počet ohodnotení unárneho predikátu \textit{u} nad spočetným univerzom je nespočetný. Počet ohodnotení predikátu je totiž rovný $2^{\mathbb{N}}$, pretože pre každý prvok x z $\mathbb{N}$ prvkov univerza môžeme definovať $p(x)$ alebo $\neg p(x)$.
+V dôkaze zároveň pracujeme s priradením, kde každej nulárnej funkcii $a_i$ priradíme hodnotu $i \in \mathbb{N}$.
 
 \begin{proof}
-    Predpokladajme, že počet realizácii je spočetný. Potom existuje zobrazenie $f: \mathbb{N} \to \{true, false\}$ 
-    Jednotlivé realizácie môžeme vyjadriť ako nekonečný reťazec 0 a 1 a teda ich môžeme usporiadať do nekonečnej postupnosti.
-    Uvažujme nekonečnú maticu, kde $a_{ij}$ je 1 ak $a_j$ v realizácii $p_i$, alebo 0 ak $\neg a_j$ v realizácii $p_i$:
+    Predpokladajme, že počet realizácii je spočetný. Potom existuje bijektívne zobrazenie $f: \mathbb{N} \to P$, kde $P$ je množina realizácii.
+    Jednotlivé realizácie môžeme vyjadriť ako nekonečný reťazec 0 a 1, ktorého jednotlivé symboly predstavujú ohodnotenie predikátu $p(i)$, kde $i \in \mathbb{N}$ je pozícia symbolu v reťazci, a teda ich môžeme usporiadať do nekonečnej postupnosti.
+    Uvažujme nekonečnú maticu, kde $a_{ij}$ je 1 ak $a_j$ v realizácii $p_i$, alebo 0 ak $\neg a_j$ v realizácii $p_i$. Táto matica je znázornená v tabuľke č. 1.
 \begin{table}[ht]
-\begin{tabular}{llllll}
-    & 1   & 2   & 3    & 4  & ... \\
+\begin{tabular}{l| lllll}
+    & 1   & 2   & 3    & 4  & ... \\ \hline 
     $p_1$  & $a_{11}$ & $a_{12}$ & $a_{13}$  & $a_{14}$ &     \\
     $p_2$  & $a_{21}$ & $a_{22}$ & $a_{23}$  & $a_{24}$ &     \\
     $p_3$  & $a_{31}$ & $a_{32}$ & $a_{33}$  & $a_{34}$ &     \\
     $p_4$  & $a_{41}$ & $a_{42}$ & $a_{43}$  & $a_{44}$ &     \\
 ... &     &   &   &   &
 \end{tabular}
+    \caption{Nekonečná matica, znázorňujúca priradenie z $\mathbb{N}$ do $P$.}
 \end{table}
 
 Uvažujme realizáciu $p_c(x) = 1 - p_x(x)$. Táto realizácia sa od každej realizácie líši
-    aspoň v jednom priradení a nenachádza sa medzi realizáciami $p_i, i \in \mathbb{N}$. Zároveň táto realizácia je validnou realizáciou a patrí do množiny realizácii. To je spor, preto množina realizácii je nutne nespočetná. 
-
-
+    aspoň v jednom priradení a nenachádza sa teda medzi realizáciami $p_i, i \in \mathbb{N}$, ktoré sú uvedené v tabuľke, a zároveň, ktorých je spočetne. Zároveň táto realizácia je validnou realizáciou a patrí do množiny realizácii. To je spor, preto množina realizácii je nutne nespočetná. 
 \end{proof}
 \section*{Úloha č.3}
 \begin{proof}
 $\mathcal{O}(3^{2n}) \subseteq \mathcal{O}(2^{3n})$ \\
-Z definície pre každú funkciu $f \in \mathcal{O}(3^{2n})$ platí, že $\exists c \in \mathbb{R}: \exists n_0 \in \mathbb{N}: \forall n > n_0: f(n) \leq c\times 3^{2n}$.  
+Z definície pre každú funkciu $f \in \mathcal{O}(3^{2n})$ platí, že $\exists c \in \mathbb{R}: \exists n_0 \in \mathbb{N}: \forall n \geq n_0: f(n) \leq c\times 3^{2n}$.  
 Na to, aby $\mathcal{O}(3^{2n}) \subseteq \mathcal{O}(2^{3n})$ stačí ukázať, že každá funkcia $f \in \mathcal{O}(3^{2n})$ je ohraničená v $\mathcal{O}(2^{3n})$.
 
 Predpokladajme, že platí práve spomenutý vzťah. Potom pre každú funkciu $f$ platí, že $\exists c,d \in \mathcal{R}^+: c \times 3^{2n} \leq d \times 2^{3n}$. 
@@ -118,7 +122,7 @@ Preto neplatí $\mathcal{O}(3^{2n}) \subseteq \mathcal{O}(2^{3n})$.
 
 \begin{proof}
 $\mathcal{O}(2^{3n}) \subseteq \mathcal{O}(3^{2n})$ \\
-Z definície pre každú funkciu $f \in \mathcal{O}(2^{3n})$ platí, že $\exists c \in \mathbb{R}: \exists n_0 \in \mathbb{N}: \forall n > n_0: f(n) \leq c\times 2^{3n}$.  
+Z definície pre každú funkciu $f \in \mathcal{O}(2^{3n})$ platí, že $\exists c \in \mathbb{R}: \exists n_0 \in \mathbb{N}: \forall n \geq n_0: f(n) \leq c\times 2^{3n}$.  
 Na to, aby $\mathcal{O}(2^{3n}) \subseteq \mathcal{O}(3^{2n})$ stačí ukázať, že každá funkcia $f \in \mathcal{O}(2^{3n})$ je ohraničená v $\mathcal{O}(3^{2n})$.
 
 Predpokladajme, že platí práve spomenutý vzťah. Potom pre každú funkciu $f$ platí, že $\exists c,d \in \mathcal{R}^+: c \times 2^{3n} \leq d \times 3^{2n}$. 
@@ -136,6 +140,10 @@ Ak zvolíme $d = c$, potom už pre $n = 0$ platí, že $1 \leq (\frac{9}{8})^n$.
 Ukázali sme teda, že pre každú $f \in \mathcal{O}(2^{3n})$ sme schopný nájsť danú konštantu $d$ tak, aby $f$ bola ohraničená funkciou $\mathcal{O}(3^{2n})$.
 Platí teda $\forall f \in \mathcal{O}(2^{3n}): f \in \mathcal{O}(3^{2n})$, teda platí $\mathcal{O}(2^{3n}) \subseteq \mathcal{O}(3^{2n})$. 
 \end{proof}
+
+\subsection*{Záver}
+Platí $\mathcal{O}(2^{3n}) \subseteq \mathcal{O}(3^{2n})$, zároveň neplatí $\mathcal{O}(3^{2n}) \subseteq \mathcal{O}(2^{3n})$, preto neplatí ani $\mathcal{O}(3^{2n}) = \mathcal{O}(2^{3n})$
+
 
 \section*{Úloha č.4}
 Rozhodovací problém farbenia grafov je jazyk ColorGraph = $\{$ (<V>,<E>\#k) | G = (<V>, <E>) je graf
