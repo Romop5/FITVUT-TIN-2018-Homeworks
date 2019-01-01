@@ -146,40 +146,78 @@ Platí $\mathcal{O}(2^{3n}) \subseteq \mathcal{O}(3^{2n})$, zároveň neplatí $
 
 
 \section*{Úloha č.4}
+Aby ste dokázali, že problém Tety Kvety je NP-úplný, ukážeme najskorej, že je možné skonštruovať NTS, ktorý overí, či inštancia problému Tety Kvety je platná. Zároveň ukážeme, že existuje redukcia z problému farbenia grafov, ktorý patrí do $NP$, na problém tety Kvety.
+
+
+Problém tety kvety je možné charakterizovať ako jazyk Kveta = $\{$ w1 \# w2 \# k | w1 je postupnosť množstva nakúpených surovín, w2 je postupnosť jednotlivých pečív a množstva pre upečenie jedného kusu a K je počet priateľok a zároveň je možné upiecť aspoň k pečiv z dostupných surovín$\}$.
+\subsection*{Prítomnosť Kveta v triede NP}
+Pre problém tety Kvety existuje 3 páskový NTS M, ktorý v polynomiálnom čase uhádne riešenie a následne ho overí.
+TS M bude pracovať nasledujúco:
+\begin{itemize}
+    \item TS M overí, či vstup w = w1\#w2\#k je validná inštancia jazyka \textit{Kveta}. Ak nie, TS M zamietne. Validnosť vstupu je možné vykonať konečným automatom, ktorého časová zložitosť je v $O(n)$. 
+    \item TS M na pomocnú pásku nedeterministicky úhadne $k$ indexov, ktoré zodpovedajú jednotlivým pečivám, ktoré budú upečené. $O(n)$.
+    \item TS M na ďalšiu pomocnú pásku skopíruje počet surovín $w1$  (v čase $O(n)$)
+    \item TS M následne prechádza jednotlivé indexy pečív ($O(n)$) a pre každý z nich prechádza zoznam ingrediencii a postupne odčitáva ingrediencie od počtu dostupných surovín, ktoré má na pomocnej páske. Počet surovín pre dané pečivo je nejaké M, teda prejdenie zoznamu ingrediencii trvá $O(m)$. Dokopy trvá tento krok $O(m \times n )$.
+ V prípade, že by pri odčítaní vzniklo záporné číslo, TS M odmietne.
+    \item Nakoniec TS M prijme (ak nedošlo ku vzniku záporného čísla).
+\end{itemize}
+
+Ukázali sme, že existuje NTS, ktorý v polynomiálnom čase overí náležitosť $w$ do problému Tety Kvety. Problém Tety Kvety teda patrí do triedy $NP$.
+
+\subsection*{Redukcia z Farbenia grafov na problém tety Kvety}
+
 Rozhodovací problém farbenia grafov je jazyk ColorGraph = $\{$ (<V>,<E>\#k) | G = (<V>, <E>) je graf
 ofarbitelný k farbami \}.
-Redukcia z farbenia grafov na problem tedy Kvety 
+Redukcia z farbenia grafov na problem tedy Kvety je funkcia $\sigma$, pre ktorú existuje úplný DTS.
 \subsection*{Algoritmus prevodu}
-Každú inštanciu jazyka ColorGraph sme schopný previesť na problém Tety Kvety nasledujúci:
+Každú inštanciu jazyka ColorGraph sme schopný previesť na problém Tety Kvety nasledujúco:
 \begin{itemize}
-    \item Pre každý uzol E vygenerujeme K+1 surovín, kde každá surovina má kapacitu 1 (teda, Teda
-        Kveta má práve 1 túto surovinu). K surovín reprezentuje jednotlivé z K farieb a K+1 surovina
+    \item Pre každý uzol E vygenerujeme K+1 surovín, kde K je počet farieb a kde každá surovina má kapacitu 1 (teda, Teda
+        Kveta má práve 1 inštanciu tejto suroviny). K surovín reprezentuje jednotlivé z K farieb a K+1 surovina
         je použitá pre detekovanie, či už je vrchol ofarbený.
-        Jednotlivé z K+1 surovín označme ako $E_i, 0 \leq i < k$.
+        Jednotlivé z K+1 surovín označme ako $E_i, 0 \leq i \leq k$.
     \item Pre každé ofarbenie uzla E farbou F 
     \begin{itemize}
-        \item vypočítame množinu vrcholov I takých, že existuje hrana medzi vrcholom E a vrcholom z
-            I a prizjednotíme vrchoľ E
+        \item vypočítame množinu vrcholov $I$ takých, že existuje hrana medzi vrcholom $E$ a vrcholom z
+            $I$ a prizjednotíme vrchoľ $E$
         \item vytvoríme "pečivo" $E_F$, ktorého ingrediencie sú suroviny $a_i, a \in I, i = F$ a
-            surovina $E_F$.
+            surovina $E_k$.
     \end{itemize}
     \item Pre takto zakódovaný problém riešime problém Tety Kvety pre počet priateľok $k$, kde $k = |V|$.
     \item Graf je ofarbiteľný práve vtedy, ak môžeme každý vrchol ofarbiť farbou tak, že
         priliehajúce vrcholy nemaju tú istú farbu.
     \item Zrejme platí, že ak upečiem pečivo $E_F$, potom toto pečivo bude pre daný vrchol jediné
-        (vďaka surovine K+1) a zároveň priliehajúce vrcholy nebudú mať rovnaké pečivo (farbu),
+        (vďaka surovine K+1, ktorá je dostupná pre daný vrchol len v jednej inštancii) a zároveň priliehajúce vrcholy nebudú mať rovnaké pečivo (farbu),
         pretože surovina ich farby už bola vyčerpaná pri pečení $E_F$.
     \item Teda platí, že ak je možné upiecť N rôznych pečív, kde N je počet vrcholov a zároveň
         platia tézy vyššie, potom graf je K-ofarbiteľný.
 \end{itemize}
+
+Platí, že graf $G$ je K-ofarbiteľný $\iff$ ku každému vrcholu V môžem priradiť farbu tak, že vrcholy na incidenčných hranách budú mať inú farbu $\iff$ môžem upiecť pečivo pre daný vrchol a počet upečených pečív je $|V|$.
 \subsection*{Príklad}
-Uvažujme graf A-B, B-C, C-D, D-A. 
-Reprezentáciu úlohy môžeme vyjadriť tabulkou:
-TODO
-suroviny ako hlavička, pečio ako riadky, Y osa ako vybrané pečivá
+Uvažujme graf A-B, B-C, C-D, D-A. Tento graf má chromatické číslo $k = 2$. 
+Reprezentáciu úlohy môžeme vyjadriť tabulkou č.2. Hlavička predstavuje jednotlivé suroviny (pričomž z každej má teta Kveta len jednu inštanciu). Každému vrcholu grafu G zodpovedá 2+1 surovín.
+V hlavičke stĺpcov sú uvedené jednotlivé pečivá, ktoré odpovedajú ofarbeniu daného vrcholu.
+
+Zjavne jedným s riešením problému Tety Kvety je napiecť pečivá $A_0, B_1, C_0, D_1$, čo zodpovedá farbe 0 pre vrchol A, 1 pre B, 0 pre C a 1 pre D.
+
+\begin{table}[ht]
+\begin{tabular}{l|llllllllllll}
+    & $A_0$ & $A_1$  &$A_2$  & $B_0$ &  $B_1$  &$B_2$ & $C_0$ &  $C_1$  &$C_2$  & $D_0$ & $D_1$  &$D_2$  \\ \hline
+$A_0$  & X &  & X& X&  &  &  &  &  & X&  &  \\
+$A_1$  &   & X& X&  & X&  &  &  &  &  & X&  \\
+$B_0$  & X &  &  & X&  & X& X&  &  &  &  &  \\
+$B_1$  &   & X&  &  & X& X&  & X&  &  &  &  \\
+$C_0$  &   &  &  & X&  &  & X&  & X& X&  &  \\
+$C_1$  &   &  &  &  & X&  &  & X& X&  & X&  \\
+$D_0$  & X &  &  &  &  &  & X&  &  & X&  & X\\
+$D_1$  &   & X&  &  &  &  &  & X&  &  & X& X 
+\end{tabular}
+    \caption{Príklad definície ingrediencii pre jednotlivé pečívá pre riešenie grafu G s k = 2}
+\end{table}
+
 \section*{Úloha č.5}
+Nasledujúca PT Petriho sieť generuje jazyk $L = \{a^k(b^l)c^l | k \geq l \}$. \\
 \includegraphics{petriNetFinalTake.pdf}
-
-
 
 \end{document}
